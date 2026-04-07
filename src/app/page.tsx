@@ -1,0 +1,80 @@
+'use client';
+
+import { useTransactions } from '@/hooks/useTransactions';
+
+// Components
+import { SummaryCards } from '@/components/SummaryCards';
+import { AccountsList } from '@/components/AccountsList';
+import { TransactionList } from '@/components/TransactionList';
+import { ChartSection } from '@/components/ChartSection';
+import { CategoryBreakdown } from '@/components/CategoryBreakdown';
+
+export default function DashboardPage() {
+  const {
+    transactions,
+    summary,
+    accounts,
+    chartData,
+    categoryBreakdown,
+    isLoading,
+    error,
+  } = useTransactions();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block w-12 h-12 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="text-[var(--text-secondary)] text-sm tracking-widest uppercase">
+            Cargando datos...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="card-futuristic-static text-center max-w-md">
+          <p className="text-red-400 text-lg mb-2">⚠️ Error de conexión</p>
+          <p className="text-[var(--text-secondary)] text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <main className="max-w-7xl mx-auto px-4 py-8">
+      {/* Header */}
+      <header className="mb-10">
+        <h1 className="text-3xl font-bold tracking-tight">
+          <span className="glow-cyan text-[var(--cyan-accent)]">Financial</span>{' '}
+          <span className="glow-magenta text-[var(--magenta-accent)]">Dashboard</span>
+        </h1>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">
+          {summary.period.from} → {summary.period.to} · Deep Space Edition
+        </p>
+      </header>
+
+      {/* Summary Cards */}
+      <SummaryCards summary={summary} />
+
+      {/* Middle row: Chart + Category Breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <div className="lg:col-span-2">
+          <ChartSection data={chartData} />
+        </div>
+        <CategoryBreakdown breakdown={categoryBreakdown} />
+      </div>
+
+      {/* Bottom row: Accounts + Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <AccountsList accounts={accounts} />
+        <div className="lg:col-span-2">
+          <TransactionList transactions={transactions} />
+        </div>
+      </div>
+    </main>
+  );
+}

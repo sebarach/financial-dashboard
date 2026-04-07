@@ -1,0 +1,53 @@
+/* ============================================
+   Global Styles — Deep Space Futurista
+   ============================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --deep-space-bg: #0a0a1a;
+  --deep-space-surface: #111128;
+  --deep-space-card: rgba(17, 17, 40, 0.6);
+  --cyan-accent: #00f0ff;
+  --magenta-accent: #ff00aa;
+  --cyan-glow: rgba(0, 240, 255, 0.15);
+  --magenta-glow: rgba(255, 0, 170, 0.15);
+  --text-primary: #e8e8ff;
+  --text-secondary: #8888aa;
+}
+
+body {
+  background: var(--deep-space-bg);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Animated gradient border */
+@keyframes borderGlow {
+  0%, 100% { border-color: var(--cyan-accent); box-shadow: 0 0 15px var(--cyan-glow); }
+  50%      { border-color: var(--magenta-accent); box-shadow: 0 0 15px var(--magenta-glow); }
+}
+
+.card-futuristic {
+  @apply backdrop-blur-md rounded-2xl p-6;
+  background: var(--deep-space-card);
+  border: 1px solid transparent;
+  animation: borderGlow 6s ease-in-out infinite;
+}
+
+.card-futuristic-static {
+  @apply backdrop-blur-md rounded-2xl p-6;
+  background: var(--deep-space-card);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+/* Glow text */
+.glow-cyan { text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow); }
+.glow-magenta { text-shadow: 0 0 10px var(--magenta-glow), 0 0 20px var(--magenta-glow); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep-space-bg); }
+::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 3px; }
