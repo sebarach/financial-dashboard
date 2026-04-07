@@ -1,63 +1,141 @@
 // ============================================
-// useTransactions — Custom Hook
-// Fase 1: retorna datos mock
-// Fase 2: cambiar la implementación interna por Supabase,
-//          la UI no se entera.
+// useTransactions — FASE 2: Datos reales desde Supabase
 // ============================================
 
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { UseTransactionsReturn } from '@/types';
+import { supabase } from '@/lib/supabase';
+import type { UseTransactionsReturn, Transaction, Account, DashboardSummary, ChartDataPoint, CategoryBreakdown } from '@/types';
 
-// === FASE 1: Importar datos mock ===
-import {
-  MOCK_TRANSACTIONS,
-  MOCK_SUMMARY,
-  MOCK_ACCOUNTS,
-  MOCK_CHART_DATA,
-  MOCK_CATEGORY_BREAKDOWN,
-} from '@/constants/mockData';
-
-// === FASE 2 (comentado): Descomentar cuando Supabase esté listo ===
-// import { supabase } from '@/lib/supabase';
-//
-// async function fetchFromSupabase() {
-//   const [txRes, accRes] = await Promise.all([
-//     supabase.from('transactions').select('*, bank:banks(*)').order('date', { ascending: false }),
-//     supabase.from('accounts').select('*, bank:banks(*)'),
-//   ]);
-//   if (txRes.error) throw txRes.error;
-//   if (accRes.error) throw accRes.error;
-//   return { transactions: txRes.data, accounts: accRes.data };
-// }
+function formatCLP(n: number) {
+  return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
+}
 
 export function useTransactions(): UseTransactionsReturn {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [summary, setSummary] = useState<DashboardSummary>({
+    totalBalance: 0, totalIncome: 0, totalExpenses: 0, netSavings: 0, savingsRate: 0,
+    period: { from: '', to: '' },
+  });
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Estado derivado de la fuente de datos
-  const [transactions, setTransactions] = useState(MOCK_TRANSACTIONS);
-  const [summary] = useState(MOCK_SUMMARY);
-  const [accounts] = useState(MOCK_ACCOUNTS);
-  const [chartData] = useState(MOCK_CHART_DATA);
-  const [categoryBreakdown] = useState(MOCK_CATEGORY_BREAKDOWN);
-
-  // Simula carga inicial (en Fase 2 será real)
   const loadData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      // === FASE 1: datos estáticos ===
-      // Simula latencia de red
-      await new Promise((r) => setTimeout(r, 400));
-      setTransactions(MOCK_TRANSACTIONS);
+      // Fetch transactions with joins
+      const { data: txData, error: txErr } = await supabase
+        .from('transactions')
+        .select('*, category:categories(*), account:accounts(bank:banks(*))')
+        .order('transaction_date', { ascending: false });
 
-      // === FASE 2: reemplazar por ===
-      // const data = await fetchFromSupabase();
-      // setTransactions(data.transactions);
-      // setAccounts(data.accounts);
-      // ... computar summary, chartData, categoryBreakdown desde los datos reales
+      if (txErr) throw txErr;
+
+      // Fetch accounts with banks
+      const { data: accData, error: accErr } = await supabase
+        .from('accounts')
+        .select('*, bank:banks(*)')
+        .eq('is_active', true);
+
+      if (accErr) throw accErr;
+
+      // Map transactions
+      const mappedTx: Transaction[] = (txData || []).map((tx: any) => ({
+        id: tx.id,
+        date: tx.transaction_date,
+        description: tx.description,
+        amount: tx.amount,
+        type: tx.type,
+        category: tx.category?.slug || 'other',
+        bank: tx.account?.bank ? {
+          id: tx.account.bank.id,
+          name: tx.account.bank.name,
+          color: tx.account.bank.color,
+          colorAlt: tx.account.bank.color_alt,
+        } : { id: '', name: '', color: '#666', colorAlt: '#333' },
+        status: tx.status,
+      }));
+
+      // Map accounts
+      const mappedAcc: Account[] = (accData || []).map((acc: any) => ({
+        id: acc.id,
+        bank: acc.bank ? {
+          id: acc.bank.id,
+          name: acc.bank.name,
+          color: acc.bank.color,
+          colorAlt: acc.bank.color_alt,
+        } : { id: '', name: '', color: '#666', colorAlt: '#333' },
+        accountType: acc.account_type,
+        balance: acc.balance,
+        currency: acc.currency,
+        lastSync: acc.last_sync,
+      }));
+
+      setTransactions(mappedTx);
+      setAccounts(mappedAcc);
+
+      // Compute summary
+      const totalBalance = mappedAcc.reduce((s, a) => s + a.balance, 0);
+      const totalIncome = mappedTx.filter(t => t.type === 'income' && t.status === 'completed').reduce((s, t) => s + t.amount, 0);
+      const totalExpenses = mappedTx.filter(t => t.type === 'expense' && t.status === 'completed').reduce((s, t) => s + Math.abs(t.amount), 0);
+      const netSavings = totalIncome - totalExpenses;
+      const savingsRate = totalIncome > 0 ? Math.round((netSavings / totalIncome) * 1000) / 10 : 0;
+
+      setSummary({
+        totalBalance,
+        totalIncome,
+        totalExpenses,
+        netSavings,
+        savingsRate,
+        period: { from: '2026-04-01', to: '2026-04-07' },
+      });
+
+      // Compute chart data (daily for current period)
+      const days: ChartDataPoint[] = [];
+      for (let d = 1; d <= 7; d++) {
+        const dateStr = `2026-04-0${d}`;
+        const dayLabel = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][new Date(dateStr).getDay()];
+        const dayTx = mappedTx.filter(t => t.date.startsWith(dateStr));
+        days.push({
+          label: `${dayLabel} ${d}`,
+          income: dayTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0),
+          expense: dayTx.filter(t => t.type === 'expense').reduce((s, t) => s + Math.abs(t.amount), 0),
+          date: dateStr,
+        });
+      }
+      setChartData(days);
+
+      // Compute category breakdown (expenses only)
+      const catMap = new Map<string, { amount: number; slug: string; color: string }>();
+      const catColors: Record<string, string> = {
+        food: '#FF6B6B', transport: '#F59E0B', entertainment: '#A78BFA',
+        bills: '#4ECDC4', investment: '#06B6D4', other: '#9CA3AF',
+      };
+      mappedTx
+        .filter(t => t.type === 'expense' && t.status === 'completed')
+        .forEach(t => {
+          const slug = t.category;
+          const prev = catMap.get(slug) || { amount: 0, slug, color: catColors[slug] || '#9CA3AF' };
+          prev.amount += Math.abs(t.amount);
+          catMap.set(slug, prev);
+        });
+
+      const totalExp = [...catMap.values()].reduce((s, c) => s + c.amount, 0);
+      const breakdown: CategoryBreakdown[] = [...catMap.values()]
+        .sort((a, b) => b.amount - a.amount)
+        .map(c => ({
+          category: c.slug as any,
+          amount: c.amount,
+          percentage: totalExp > 0 ? Math.round((c.amount / totalExp) * 1000) / 10 : 0,
+          color: c.color,
+        }));
+      setCategoryBreakdown(breakdown);
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
     } finally {
@@ -65,18 +143,7 @@ export function useTransactions(): UseTransactionsReturn {
     }
   }, []);
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  useEffect(() => { loadData(); }, [loadData]);
 
-  return {
-    transactions,
-    summary,
-    accounts,
-    chartData,
-    categoryBreakdown,
-    isLoading,
-    error,
-    refetch: loadData,
-  };
+  return { transactions, summary, accounts, chartData, categoryBreakdown, isLoading, error, refetch: loadData };
 }
