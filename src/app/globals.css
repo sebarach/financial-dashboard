@@ -1,5 +1,5 @@
 /* ============================================
-   Global Styles — Deep Space Futurista
+   Global Styles — Deep Space Futurista · Mobile First
    ============================================ */
 
 @tailwind base;
@@ -18,11 +18,20 @@
   --text-secondary: #8888aa;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   background: var(--deep-space-bg);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Prevent pull-to-refresh on mobile */
+html { overflow-y: scroll; overscroll-behavior-y: contain; }
 
 /* Animated gradient border */
 @keyframes borderGlow {
@@ -31,23 +40,28 @@ body {
 }
 
 .card-futuristic {
-  @apply backdrop-blur-md rounded-2xl p-6;
+  @apply backdrop-blur-md rounded-2xl p-4 sm:p-6;
   background: var(--deep-space-card);
   border: 1px solid transparent;
   animation: borderGlow 6s ease-in-out infinite;
 }
 
 .card-futuristic-static {
-  @apply backdrop-blur-md rounded-2xl p-6;
+  @apply backdrop-blur-md rounded-2xl p-4 sm:p-6;
   background: var(--deep-space-card);
   border: 1px solid rgba(0, 240, 255, 0.2);
 }
 
-/* Glow text */
 .glow-cyan { text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow); }
 .glow-magenta { text-shadow: 0 0 10px var(--magenta-glow), 0 0 20px var(--magenta-glow); }
 
+/* Touch-friendly tap targets */
+a, button { min-height: 44px; }
+
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--deep-space-bg); }
-::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 3px; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 2px; }
+
+/* Safe area for notch phones */
+body { padding-top: env(safe-area-inset-top); }
