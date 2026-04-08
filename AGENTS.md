@@ -179,15 +179,16 @@ git push origin develop
 # Para deploy: merge develop → main
 git checkout main && git merge develop --squash && git push origin main
 
-# Supabase queries (Management API)
+# Supabase queries (Management API) — leer tokens de .env.local
+source .env.local 2>/dev/null
 curl -s -X POST "https://api.supabase.com/v1/projects/fqhiyizidaphnudefdzu/database/query" \
-  -H "Authorization: Bearer sbp_cab48f46df688949f064a0846309f76dfec71062" \
+  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT * FROM transactions LIMIT 5;"}'
 
 # Supabase REST API
 curl "https://fqhiyizidaphnudefdzu.supabase.co/rest/v1/transactions?select=*&limit=5" \
-  -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxaGl5aXppZGFwaG51ZGVmZHp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTg0MDMsImV4cCI6MjA5MTE3NDQwM30.oL7bouyfzWJ-Y54V2B_jexK6iIYM5s8DeHP06KNSxRU"
+  -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY"
 
 # GitHub CLI
 gh run list --repo sebarach/financial-dashboard --limit 3    # Ver deploys
