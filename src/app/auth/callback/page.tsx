@@ -1,0 +1,38 @@
+// ============================================
+// Auth Callback — Handles OAuth redirects
+// ============================================
+
+'use client';
+
+import { useEffect } from 'react';
+import { createClient } from '@/lib/supabase-client';
+import { useRouter } from 'next/navigation';
+
+export default function AuthCallbackPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    const handleCallback = async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(
+        window.location.href.split('?')[1] || ''
+      );
+      if (error) {
+        console.error('Auth callback error:', error.message);
+        router.replace('/auth?error=callback_failed');
+      } else {
+        router.replace('/');
+      }
+    };
+    handleCallback();
+  }, [router, supabase]);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-deep)' }}>
+      <div className="text-center">
+        <div className="inline-block w-8 h-8 border-2 border-[var(--cyan-accent)] border-t-transparent rounded-full animate-spin" />
+        <p className="text-gray-400 mt-4 text-sm">Verificando...</p>
+      </div>
+    </div>
+  );
+}

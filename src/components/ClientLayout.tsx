@@ -2,10 +2,43 @@
 
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { usePathname } from 'next/navigation';
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!isLoading && !user && pathname !== '/auth' && !pathname.startsWith('/auth/')) {
+      window.location.href = '/auth';
+    }
+  }, [user, isLoading, pathname]);
+
+  // Show auth page without layout
+  if (pathname === '/auth' || pathname.startsWith('/auth/')) {
+    return <>{children}</>;
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-deep)' }}>
+        <div className="inline-block w-8 h-8 border-2 border-[var(--cyan-accent)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // Not authenticated
+  if (!user) return null;
+
+  return <AppLayout>{children}</AppLayout>;
+}
+
+function AppLayout({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     // Register SW
@@ -18,6 +51,8 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  const initials = user?.email?.substring(0, 2).toUpperCase() || 'U';
 
   return (
     <>
@@ -41,9 +76,13 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
             <span className="text-[var(--cyan-accent)]">Fin</span>
             <span className="text-[var(--magenta-accent)]">Dash</span>
           </span>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--cyan-accent)] to-[var(--magenta-accent)] flex items-center justify-center text-[10px] font-bold text-[#0a0a1a]">
-            SS
-          </div>
+          <button
+            onClick={signOut}
+            className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--cyan-accent)] to-[var(--magenta-accent)] flex items-center justify-center text-[10px] font-bold text-[#0a0a1a]"
+            title={`Logout (${user?.email})`}
+          >
+            {initials}
+          </button>
         </header>
       )}
 
@@ -55,7 +94,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Sidebar — always visible on desktop, drawer on mobile */}
+      {/* Sidebar */}
       <div
         className={
           isMobile
@@ -73,5 +112,13 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </>
+  );
+}
+
+export function ClientLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <AuthGuard>{children}</AuthGuard>
+    </AuthProvider>
   );
 }

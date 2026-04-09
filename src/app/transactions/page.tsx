@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
+import { useAuth } from '@/contexts/AuthContext';
 import { useTransactions } from '@/hooks/useTransactions';
 import {
   createTransaction,
@@ -44,7 +45,8 @@ function formatTime(iso: string) {
 // Main Component
 // ============================================
 export default function TransactionsPage() {
-  const { transactions, isLoading, refetch } = useTransactions();
+  const { user } = useAuth();
+  const { transactions, isLoading, refetch } = useTransactions(user?.id);
   const [accounts, setAccounts] = useState<AccountOption[]>([]);
   const [categories, setCategories] = useState<CategoryOption[]>([]);
 
@@ -78,10 +80,12 @@ export default function TransactionsPage() {
 
   // Load accounts & categories
   useEffect(() => {
+    if (!user) return;
     async function load() {
+      const sb = createClient();
       const [accRes, catRes] = await Promise.all([
-        supabase.from('accounts').select('id, name, bank:banks(name, color)').eq('is_active', true),
-        supabase.from('categories').select('*').order('type').order('name'),
+        sb.from('accounts').select('id, name, bank:banks(name, color)').eq('is_active', true).eq('user_id', user!.id),
+        sb.from('categories').select('*').order('type').order('name'),
       ]);
       if (accRes.data) {
         setAccounts(accRes.data.map((a: any) => ({
@@ -92,7 +96,7 @@ export default function TransactionsPage() {
       if (catRes.data) setCategories(catRes.data);
     }
     load();
-  }, []);
+  }, [user]);
 
   // Filter categories by type
   const filteredCategories = categories.filter(c =>
@@ -171,7 +175,7 @@ export default function TransactionsPage() {
     setSubmitError(null);
 
     if (mode === 'simple') {
-      const input = buildInput();
+      const input = { ...buildInput(), user_id: user!.id };
       const errors = validateTransaction(input as CreateTransactionInput);
       if (Object.keys(errors).length > 0) {
         setFieldErrors(errors);
@@ -188,7 +192,7 @@ export default function TransactionsPage() {
         setSubmitting(false);
       }
     } else {
-      const input = buildTransferInput();
+      const input = { ...buildTransferInput(), user_id: user!.id };
       const errors = validateTransfer(input as TransferInput);
       if (Object.keys(errors).length > 0) {
         setFieldErrors(errors);

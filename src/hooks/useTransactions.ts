@@ -5,14 +5,14 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import type { UseTransactionsReturn, Transaction, Account, DashboardSummary, ChartDataPoint, CategoryBreakdown } from '@/types';
 
 function formatCLP(n: number) {
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
 }
 
-export function useTransactions(): UseTransactionsReturn {
+export function useTransactions(userId: string | undefined): UseTransactionsReturn {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [summary, setSummary] = useState<DashboardSummary>({
     totalBalance: 0, totalIncome: 0, totalExpenses: 0, netSavings: 0, savingsRate: 0,
@@ -25,13 +25,16 @@ export function useTransactions(): UseTransactionsReturn {
   const [error, setError] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
+    if (!userId) return;
     setIsLoading(true);
     setError(null);
+    const supabase = createClient();
     try {
       // Fetch transactions with joins
       const { data: txData, error: txErr } = await supabase
         .from('transactions')
         .select('*, category:categories(*), account:accounts(bank:banks(*))')
+        .eq('user_id', userId)
         .order('transaction_date', { ascending: false });
 
       if (txErr) throw txErr;
@@ -40,7 +43,8 @@ export function useTransactions(): UseTransactionsReturn {
       const { data: accData, error: accErr } = await supabase
         .from('accounts')
         .select('*, bank:banks(*)')
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .eq('user_id', userId);
 
       if (accErr) throw accErr;
 
@@ -143,7 +147,7 @@ export function useTransactions(): UseTransactionsReturn {
     }
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => { if (userId) loadData(); }, [loadData, userId]);
 
   return { transactions, summary, accounts, chartData, categoryBreakdown, isLoading, error, refetch: loadData };
 }

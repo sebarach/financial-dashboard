@@ -2,7 +2,7 @@
 // Transaction Service — Capa de negocio
 // ============================================
 
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 
 export interface CreateTransactionInput {
   account_id: string;
@@ -12,6 +12,7 @@ export interface CreateTransactionInput {
   description: string;
   transaction_date: string;
   status?: 'completed' | 'pending';
+  user_id: string;
 }
 
 export interface TransferInput {
@@ -20,6 +21,7 @@ export interface TransferInput {
   amount: number;
   description: string;
   transaction_date: string;
+  user_id: string;
 }
 
 export interface ValidationErrors {
@@ -103,11 +105,13 @@ export function validateTransfer(input: Partial<TransferInput>): ValidationError
 }
 
 export async function createTransaction(input: CreateTransactionInput) {
+  const supabase = createClient();
   const amount = input.type === 'expense' ? -Math.abs(input.amount) : Math.abs(input.amount);
 
   const { data, error } = await supabase
     .from('transactions')
     .insert({
+      user_id: input.user_id,
       account_id: input.account_id,
       category_id: input.category_id,
       amount,
@@ -124,9 +128,11 @@ export async function createTransaction(input: CreateTransactionInput) {
 }
 
 export async function createTransfer(input: TransferInput) {
+  const supabase = createClient();
   const { data: fromTx, error: err1 } = await supabase
     .from('transactions')
     .insert({
+      user_id: input.user_id,
       account_id: input.from_account_id,
       category_id: (await getTransferCategoryId()),
       amount: -Math.abs(input.amount),
@@ -143,6 +149,7 @@ export async function createTransfer(input: TransferInput) {
   const { data: toTx, error: err2 } = await supabase
     .from('transactions')
     .insert({
+      user_id: input.user_id,
       account_id: input.to_account_id,
       category_id: (await getTransferCategoryId()),
       amount: Math.abs(input.amount),
@@ -170,6 +177,7 @@ export async function createTransfer(input: TransferInput) {
 let _transferCategoryId = '';
 async function getTransferCategoryId(): Promise<string> {
   if (_transferCategoryId) return _transferCategoryId;
+  const supabase = createClient();
   const { data } = await supabase
     .from('categories')
     .select('id')
@@ -180,6 +188,7 @@ async function getTransferCategoryId(): Promise<string> {
 }
 
 export async function deleteTransaction(id: string) {
+  const supabase = createClient();
   const { error } = await supabase.from('transactions').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }

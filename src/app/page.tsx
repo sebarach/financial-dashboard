@@ -1,6 +1,7 @@
 'use client';
 
 import { useTransactions } from '@/hooks/useTransactions';
+import { useAuth } from '@/contexts/AuthContext';
 import { SummaryCards } from '@/components/SummaryCards';
 import { AccountsList } from '@/components/AccountsList';
 import { TransactionList } from '@/components/TransactionList';
@@ -8,6 +9,7 @@ import { ChartSection } from '@/components/ChartSection';
 import { CategoryBreakdown } from '@/components/CategoryBreakdown';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const {
     transactions,
     summary,
@@ -16,7 +18,7 @@ export default function DashboardPage() {
     categoryBreakdown,
     isLoading,
     error,
-  } = useTransactions();
+  } = useTransactions(user?.id);
 
   if (isLoading) {
     return (
