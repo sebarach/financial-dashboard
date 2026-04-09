@@ -119,7 +119,7 @@ export async function createTransaction(input: CreateTransactionInput) {
       description: input.description.trim(),
       transaction_date: input.transaction_date,
       status: input.status || 'completed',
-    })
+    } as any)
     .select('*, category:categories(*), account:accounts(bank:banks(*))')
     .single();
 
@@ -140,7 +140,7 @@ export async function createTransfer(input: TransferInput) {
       description: `Transferencia → ${input.description}`.trim(),
       transaction_date: input.transaction_date,
       status: 'completed',
-    })
+    } as any)
     .select('id')
     .single();
 
@@ -157,7 +157,7 @@ export async function createTransfer(input: TransferInput) {
       description: `Transferencia ← ${input.description}`.trim(),
       transaction_date: input.transaction_date,
       status: 'completed',
-    })
+    } as any)
     .select('id')
     .single();
 
@@ -167,9 +167,9 @@ export async function createTransfer(input: TransferInput) {
   await supabase
     .from('transfer_pairs')
     .insert({
-      from_transaction_id: fromTx.id,
-      to_transaction_id: toTx.id,
-    });
+      from_transaction_id: (fromTx as any).id,
+      to_transaction_id: (toTx as any).id,
+    } as any);
 
   return { from: fromTx, to: toTx };
 }
@@ -183,7 +183,7 @@ async function getTransferCategoryId(): Promise<string> {
     .select('id')
     .eq('slug', 'transfer')
     .single();
-  _transferCategoryId = data?.id ?? '';
+  _transferCategoryId = (data as any)?.id ?? '';
   return _transferCategoryId;
 }
 
