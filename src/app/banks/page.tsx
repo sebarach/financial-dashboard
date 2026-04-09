@@ -388,7 +388,7 @@ export default function BanksPage() {
                   placeholder="Ej: Banco de Chile, Santander..."
                   value={formName}
                   onChange={e => handleNameChange(e.target.value)}
-                  onBlur={() => touchField('name')}
+
                   maxLength={50}
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
                     fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -405,7 +405,7 @@ export default function BanksPage() {
                   placeholder="banco-de-chile"
                   value={formSlug}
                   onChange={e => setFormSlug(e.target.value)}
-                  onBlur={() => touchField('slug')}
+
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
                     fieldErrors.slug ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                   }`}
@@ -428,7 +428,7 @@ export default function BanksPage() {
                       type="text"
                       value={formColor}
                       onChange={e => setFormColor(e.target.value)}
-                      onBlur={() => touchField('color')}
+
                       maxLength={7}
                       className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
                         fieldErrors.color ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -450,7 +450,7 @@ export default function BanksPage() {
                       type="text"
                       value={formColorAlt}
                       onChange={e => setFormColorAlt(e.target.value)}
-                      onBlur={() => touchField('color_alt')}
+
                       maxLength={7}
                       className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
                         fieldErrors.color_alt ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'

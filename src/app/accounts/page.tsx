@@ -459,7 +459,7 @@ export default function AccountsPage() {
                   placeholder="Ej: Cuenta Corriente Principal, Ahorro Vacaciones..."
                   value={formName}
                   onChange={e => setFormName(e.target.value)}
-                  onBlur={() => touchField('name')}
+
                   maxLength={60}
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
                     fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -480,7 +480,7 @@ export default function AccountsPage() {
                     placeholder="0"
                     value={formBalance}
                     onChange={e => setFormBalance(e.target.value)}
-                    onBlur={() => touchField('balance')}
+
                     className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
                       fieldErrors.balance ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                     }`}

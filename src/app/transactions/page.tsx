@@ -457,7 +457,7 @@ export default function TransactionsPage() {
                         placeholder="0"
                         value={formAmount}
                         onChange={e => setFormAmount(e.target.value)}
-                        onBlur={() => touchField('amount')}
+
                         className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
                           fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                         }`}
@@ -477,7 +477,7 @@ export default function TransactionsPage() {
                       placeholder="Ej: Supermercado, Netflix, Sueldo..."
                       value={formDescription}
                       onChange={e => setFormDescription(e.target.value)}
-                      onBlur={() => touchField('description')}
+
                       maxLength={120}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
                         fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -494,7 +494,7 @@ export default function TransactionsPage() {
                       <select
                         value={formAccountId}
                         onChange={e => setFormAccountId(e.target.value)}
-                        onBlur={() => touchField('account_id')}
+
                         className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
                           fieldErrors.account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                         }`}
@@ -511,7 +511,7 @@ export default function TransactionsPage() {
                       <select
                         value={formCategoryId}
                         onChange={e => setFormCategoryId(e.target.value)}
-                        onBlur={() => touchField('category_id')}
+
                         className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
                           fieldErrors.category_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                         }`}
@@ -532,7 +532,7 @@ export default function TransactionsPage() {
                       type="date"
                       value={formDate}
                       onChange={e => setFormDate(e.target.value)}
-                      onBlur={() => touchField('transaction_date')}
+
                       max={new Date().toISOString().split('T')[0]}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
                         fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -550,7 +550,7 @@ export default function TransactionsPage() {
                     <select
                       value={formFromAccount}
                       onChange={e => setFormFromAccount(e.target.value)}
-                      onBlur={() => touchField('from_account_id')}
+
                       className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
                         fieldErrors.from_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                       }`}
@@ -573,7 +573,7 @@ export default function TransactionsPage() {
                     <select
                       value={formToAccount}
                       onChange={e => setFormToAccount(e.target.value)}
-                      onBlur={() => touchField('to_account_id')}
+
                       className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
                         fieldErrors.to_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                       }`}
@@ -597,7 +597,7 @@ export default function TransactionsPage() {
                         placeholder="0"
                         value={formTransferAmount}
                         onChange={e => setFormTransferAmount(e.target.value)}
-                        onBlur={() => touchField('amount')}
+
                         className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
                           fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
                         }`}
@@ -614,7 +614,7 @@ export default function TransactionsPage() {
                       placeholder="Motivo de la transferencia"
                       value={formTransferDesc}
                       onChange={e => setFormTransferDesc(e.target.value)}
-                      onBlur={() => touchField('description')}
+
                       maxLength={120}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
                         fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
@@ -630,7 +630,7 @@ export default function TransactionsPage() {
                       type="date"
                       value={formTransferDate}
                       onChange={e => setFormTransferDate(e.target.value)}
-                      onBlur={() => touchField('transaction_date')}
+
                       max={new Date().toISOString().split('T')[0]}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
                         fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
