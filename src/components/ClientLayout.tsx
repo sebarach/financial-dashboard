@@ -3,17 +3,19 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
 
+  const router = useRouter();
+
   useEffect(() => {
     if (!isLoading && !user && pathname !== '/auth' && !pathname.startsWith('/auth/')) {
-      window.location.href = '/auth';
+      router.replace('/auth');
     }
-  }, [user, isLoading, pathname]);
+  }, [user, isLoading, pathname, router]);
 
   // Show auth page without layout
   if (pathname === '/auth' || pathname.startsWith('/auth/')) {
