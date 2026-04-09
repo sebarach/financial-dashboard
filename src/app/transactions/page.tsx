@@ -54,6 +54,7 @@ export default function TransactionsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [selectedTx, setSelectedTx] = useState<typeof transactions[0] | null>(null);
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -319,7 +320,8 @@ export default function TransactionsPage() {
           {filtered.map(tx => (
             <div
               key={tx.id}
-              className="card-futuristic-static py-3 px-4 flex items-center gap-3 group"
+              onClick={() => setSelectedTx(tx)}
+              className="card-futuristic-static py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--cyan-accent)]/20 transition-all"
             >
               {/* Icon */}
               <div
@@ -369,6 +371,108 @@ export default function TransactionsPage() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ============================================
+          MODAL — Detalle de Transacción
+          ============================================ */}
+      {selectedTx && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedTx(null)} />
+          <div
+            className="relative w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl"
+            style={{ background: 'var(--deep-space-surface)', border: '1px solid rgba(0, 240, 255, 0.15)' }}
+          >
+            <div className="p-5 sm:p-6">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">Detalle</h2>
+                <button
+                  onClick={() => setSelectedTx(null)}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/5"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Amount hero */}
+              <div className="text-center mb-6 py-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
+                <p className={`text-3xl font-mono font-bold ${
+                  selectedTx.amount >= 0 ? 'text-[var(--cyan-accent)] glow-cyan' : 'text-[var(--magenta-accent)] glow-magenta'
+                }`}>
+                  {selectedTx.amount >= 0 ? '+' : ''}{formatCLP(selectedTx.amount)}
+                </p>
+                <p className={`text-xs mt-2 uppercase tracking-widest ${
+                  selectedTx.type === 'income' ? 'text-[var(--cyan-accent)]' :
+                  selectedTx.type === 'expense' ? 'text-[var(--magenta-accent)]' : 'text-yellow-400'
+                }`}>
+                  {selectedTx.type === 'income' ? '↑ Ingreso' : selectedTx.type === 'expense' ? '↓ Gasto' : '⇄ Transferencia'}
+                </p>
+              </div>
+
+              {/* Details */}
+              <div className="space-y-3">
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Descripción</span>
+                  <span className="text-sm text-[var(--text-primary)] text-right max-w-[60%]">{selectedTx.description}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Categoría</span>
+                  <span className="text-sm text-[var(--text-primary)]">{CATEGORY_LABELS[selectedTx.category] || selectedTx.category}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Cuenta</span>
+                  <span className="text-sm text-[var(--text-primary)]">{selectedTx.bank.name}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Fecha</span>
+                  <span className="text-sm text-[var(--text-primary)]">{formatDate(selectedTx.date)}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Hora</span>
+                  <span className="text-sm text-[var(--text-primary)]">{formatTime(selectedTx.date)}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-white/5">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Estado</span>
+                  <span className={`text-sm ${selectedTx.status === 'completed' ? 'text-green-400' : selectedTx.status === 'pending' ? 'text-yellow-400' : 'text-red-400'}`}>
+                    {selectedTx.status === 'completed' ? '✓ Completada' : selectedTx.status === 'pending' ? '◐ Pendiente' : '✗ Fallida'}
+                  </span>
+                </div>
+                <div className="flex justify-between py-2">
+                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">ID</span>
+                  <span className="text-[10px] text-[var(--text-secondary)] font-mono">{selectedTx.id}</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 mt-6">
+                {deleteConfirm === selectedTx.id ? (
+                  <>
+                    <button onClick={() => { handleDelete(selectedTx.id); setSelectedTx(null); }} className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-red-500/20 text-red-400 border border-red-400/30">
+                      Confirmar eliminación
+                    </button>
+                    <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-[var(--text-secondary)]">
+                      Cancelar
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setDeleteConfirm(selectedTx.id)}
+                    className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-red-400/20 text-red-400 hover:bg-red-400/10 transition-all"
+                  >
+                    🗑 Eliminar
+                  </button>
+                )}
+                <button
+                  onClick={() => setSelectedTx(null)}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
