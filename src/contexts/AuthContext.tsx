@@ -46,15 +46,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   const signIn = useCallback(async (email: string, password: string) => {
+    const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error?.message ?? null };
   }, [supabase]);
 
   const signUp = useCallback(async (email: string, password: string) => {
+    const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/financial-dashboard/auth/callback` },
+      options: { emailRedirectTo: `${window.location.origin}${basePath}/auth/callback` },
     });
     const needsConfirmation = !data.session && !error;
     return { error: error?.message ?? null, needsConfirmation };
@@ -65,9 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   const signInWithGoogle = useCallback(async () => {
+    const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/financial-dashboard/auth/callback` },
+      options: { redirectTo: `${window.location.origin}${basePath}/auth/callback` },
     });
   }, [supabase]);
 

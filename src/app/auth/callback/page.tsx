@@ -10,13 +10,11 @@ import { useRouter } from 'next/navigation';
 
 export default function AuthCallbackPage() {
   const router = useRouter();
-  const supabase = createClient();
 
   useEffect(() => {
     const handleCallback = async () => {
-      const { error } = await supabase.auth.exchangeCodeForSession(
-        window.location.href.split('?')[1] || ''
-      );
+      const supabase = createClient();
+      const { error } = await supabase.auth.getSession();
       if (error) {
         console.error('Auth callback error:', error.message);
         router.replace('/auth?error=callback_failed');
@@ -25,7 +23,7 @@ export default function AuthCallbackPage() {
       }
     };
     handleCallback();
-  }, [router, supabase]);
+  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-deep)' }}>
