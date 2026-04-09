@@ -7,6 +7,7 @@ const menuItems = [
   { label: 'Dashboard', href: '/', icon: '◈' },
   { label: 'Transacciones', href: '/transactions', icon: '⇄' },
   { label: 'Cuentas', href: '/accounts', icon: '◫' },
+  { label: 'Bancos', href: '/banks', icon: '🏛' },
   { label: 'Presupuesto', href: '/budget', icon: '◉' },
   { label: 'Inversiones', href: '/investments', icon: '📈' },
   { label: 'Reportes', href: '/reports', icon: '▤' },
