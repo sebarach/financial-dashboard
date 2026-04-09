@@ -58,7 +58,10 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const initials = user?.email?.substring(0, 2).toUpperCase() || 'U';
+  const meta = user?.user_metadata || {};
+  const fullName = meta.full_name || meta.name || user?.email?.split('@')[0] || 'Usuario';
+  const avatarUrl = meta.avatar_url || meta.picture;
+  const initials = fullName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase();
 
   return (
     <>
@@ -92,10 +95,16 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           </span>
           <button
             onClick={signOut}
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--cyan-accent)] to-[var(--magenta-accent)] flex items-center justify-center text-[10px] font-bold text-[#0a0a1a]"
-            title={`Logout (${user?.email})`}
+            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-[var(--cyan-accent)]/30 flex-shrink-0"
+            title={`Logout (${fullName})`}
           >
-            {initials}
+            {avatarUrl ? (
+              <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[var(--cyan-accent)] to-[var(--magenta-accent)] flex items-center justify-center text-[10px] font-bold text-[#0a0a1a]">
+                {initials}
+              </div>
+            )}
           </button>
         </header>
       )}
