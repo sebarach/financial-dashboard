@@ -51,7 +51,7 @@ function validateAccount(input: Partial<CreateAccountInput>): ValidationErrors {
   if (!input.name?.trim()) errors.name = 'Nombre requerido';
   if (!input.bank_id) errors.bank_id = 'Selecciona un banco';
   if (!input.account_type) errors.account_type = 'Selecciona un tipo';
-  if (!input.balance || isNaN(input.balance)) errors.balance = 'Ingresa un saldo válido';
+  if (!input.balance === undefined || input.balance === null || isNaN(input.balance)) errors.balance = 'Ingresa un saldo válido';
   return errors;
 }
 
