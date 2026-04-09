@@ -410,7 +410,7 @@ export default function AccountsPage() {
                     <button
                       key={bank.id}
                       type="button"
-                      onClick={() => { setFormBankId(bank.id); touchField('bank_id'); }}
+                      onClick={() => { setFormBankId(bank.id); setFieldErrors(prev => { const { bank_id, ...rest } = prev; return rest; }); }}
                       className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all border flex items-center gap-2 ${
                         formBankId === bank.id
                           ? 'border-white/30 text-white'
@@ -437,7 +437,7 @@ export default function AccountsPage() {
                     <button
                       key={key}
                       type="button"
-                      onClick={() => { setFormAccountType(key); touchField('account_type'); }}
+                      onClick={() => { setFormAccountType(key); setFieldErrors(prev => { const { account_type, ...rest } = prev; return rest; }); }}
                       className={`py-2.5 rounded-xl text-xs font-medium transition-all border ${
                         formAccountType === key
                           ? 'border-[var(--cyan-accent)]/50 text-[var(--cyan-accent)] bg-[var(--cyan-accent)]/5'
