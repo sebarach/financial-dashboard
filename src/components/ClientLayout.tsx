@@ -12,10 +12,14 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !user && pathname !== '/auth' && !pathname.startsWith('/auth/')) {
-      router.replace('/auth');
+    if (isLoading) return;
+    const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
+    if (!user && pathname !== '/auth' && !pathname.startsWith('/auth/')) {
+      window.location.href = `${basePath}/auth/`;
+    } else if (user && (pathname === '/auth' || pathname.startsWith('/auth/'))) {
+      window.location.href = `${basePath}/`;
     }
-  }, [user, isLoading, pathname, router]);
+  }, [user, isLoading, pathname]);
 
   // Show auth page without layout
   if (pathname === '/auth' || pathname.startsWith('/auth/')) {
