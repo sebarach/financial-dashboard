@@ -29,6 +29,8 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="icon" href="/financial-dashboard/icons/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/financial-dashboard/icons/icon-192.png" sizes="192x192" type="image/png" />
         <link rel="apple-touch-icon" href="/financial-dashboard/icons/icon-192.png" />
       </head>
       <body className="min-h-screen antialiased">
