@@ -21,7 +21,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
