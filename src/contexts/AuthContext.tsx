@@ -32,14 +32,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const supabase = createClient();
+
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
+    supabase.auth.getSession().then((res: any) => {
+      const session = res.data?.session ?? null;
       setState({ user: session?.user ?? null, session, isLoading: false });
+    }).catch(() => {
+      setState({ user: null, session: null, isLoading: false });
     });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
-      setState({ user: session?.user ?? null, session, isLoading: false });
+    // Listen for auth changes (login, logout, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string, session: any) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') {
+        setState({ user: session?.user ?? null, session, isLoading: false });
+      } else if (event === 'SIGNED_OUT') {
+        setState({ user: null, session: null, isLoading: false });
+      }
     });
 
     return () => subscription.unsubscribe();
