@@ -62,6 +62,14 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      {/* Desktop: sidebar fixed left, content with margin */}
+      {/* Mobile: top bar + drawer */}
+      {!isMobile && (
+        <div className="fixed top-0 left-0 h-screen z-30">
+          <Sidebar onNavigate={() => setDrawerOpen(false)} />
+        </div>
+      )}
+
       {/* Mobile top bar */}
       {isMobile && (
         <header
@@ -100,18 +108,16 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Sidebar */}
-      <div
-        className={
-          isMobile
-            ? `fixed top-0 left-0 h-full z-50 transition-transform duration-300 ${
-                drawerOpen ? 'translate-x-0' : '-translate-x-full'
-              }`
-            : ''
-        }
-      >
-        <Sidebar onNavigate={() => setDrawerOpen(false)} />
-      </div>
+      {/* Mobile sidebar drawer */}
+      {isMobile && (
+        <div
+          className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ${
+            drawerOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <Sidebar onNavigate={() => setDrawerOpen(false)} />
+        </div>
+      )}
 
       {/* Main content */}
       <div className={`${isMobile ? 'mt-14' : 'md:ml-[220px]'} transition-all duration-300`}>
