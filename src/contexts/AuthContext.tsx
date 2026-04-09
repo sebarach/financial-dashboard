@@ -29,9 +29,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session: null,
     isLoading: true,
   });
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setState({ user: session?.user ?? null, session, isLoading: false });
@@ -43,15 +43,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error?.message ?? null };
-  }, [supabase]);
+  }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
+    const supabase = createClient();
     const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
     const { error, data } = await supabase.auth.signUp({
       email,
@@ -60,19 +61,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     const needsConfirmation = !data.session && !error;
     return { error: error?.message ?? null, needsConfirmation };
-  }, [supabase]);
+  }, []);
 
   const signOut = useCallback(async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
-  }, [supabase]);
+  }, []);
 
   const signInWithGoogle = useCallback(async () => {
+    const supabase = createClient();
     const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}${basePath}/auth/callback` },
     });
-  }, [supabase]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ ...state, signIn, signUp, signOut, signInWithGoogle }}>
