@@ -55,7 +55,10 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [selectedTx, setSelectedTx] = useState<typeof transactions[0] | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<string>('all'); // 'all' | 'YYYY-MM'
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  });
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -108,7 +111,6 @@ export default function TransactionsPage() {
   // Available months from transactions + always include current month
   const availableMonths = (() => {
     const months = new Set<string>();
-    // Always add current month
     const now = new Date();
     months.add(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
     transactions.forEach(tx => {
@@ -119,6 +121,18 @@ export default function TransactionsPage() {
     return Array.from(months).sort().reverse();
   })();
 
+  // Reset to current month if selected is no longer valid
+  useEffect(() => {
+    if (!selectedMonth) return;
+    const [y, m] = selectedMonth.split('-').map(Number);
+    const d = new Date(y, m - 1);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    if (!availableMonths.includes(key)) {
+      const now = new Date();
+      setSelectedMonth(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
+    }
+  }, [availableMonths, selectedMonth]);
+
   const monthLabels: Record<string, string> = {
     '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
     '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
@@ -128,7 +142,7 @@ export default function TransactionsPage() {
   // Filter transactions
   const filtered = transactions.filter(tx => {
     if (activeTab !== 'all' && tx.type !== activeTab) return false;
-    if (selectedMonth !== 'all') {
+    if (selectedMonth) {
       const d = new Date(tx.date);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       if (key !== selectedMonth) return false;
@@ -307,7 +321,7 @@ export default function TransactionsPage() {
             onChange={e => setSelectedMonth(e.target.value)}
             className="px-3 py-2.5 rounded-xl text-sm bg-[var(--deep-space-bg)] border border-white/5 focus:border-[var(--cyan-accent)]/40 text-[var(--text-primary)] outline-none transition-all appearance-none cursor-pointer"
           >
-            <option value="all">Todos los meses</option>
+            <option value="">Todos los meses</option>
             {availableMonths.map(m => (
               <option key={m} value={m}>
                 {monthLabels[m.split('-')[1]]} {m.split('-')[0]}
