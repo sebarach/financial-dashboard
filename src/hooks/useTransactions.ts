@@ -29,12 +29,22 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
     setIsLoading(true);
     setError(null);
     const supabase = createClient();
+
+    // Current month range
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDay = new Date(year, month, 1).toISOString().slice(0, 10);
+    const lastDay = new Date(year, month + 1, 0).toISOString().slice(0, 10);
+
     try {
-      // Fetch transactions with joins
+      // Fetch current-month transactions with joins
       const { data: txData, error: txErr } = await supabase
         .from('transactions')
         .select('*, category:categories(*), account:accounts(bank:banks(*))')
         .eq('user_id', userId)
+        .gte('transaction_date', firstDay)
+        .lte('transaction_date', lastDay)
         .order('transaction_date', { ascending: false });
 
       if (txErr) throw txErr;
@@ -96,14 +106,15 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
         totalExpenses,
         netSavings,
         savingsRate,
-        period: { from: '2026-04-01', to: '2026-04-07' },
+        period: { from: firstDay, to: lastDay },
       });
 
-      // Compute chart data (daily for current period)
+      // Compute chart data (daily for current month)
+      const dayLabels = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
       const days: ChartDataPoint[] = [];
-      for (let d = 1; d <= 7; d++) {
-        const dateStr = `2026-04-0${d}`;
-        const dayLabel = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][new Date(dateStr).getDay()];
+      for (let d = 1; d <= new Date(year, month + 1, 0).getDate(); d++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayLabel = dayLabels[new Date(dateStr + 'T12:00:00').getDay()];
         const dayTx = mappedTx.filter(t => t.date.startsWith(dateStr));
         days.push({
           label: `${dayLabel} ${d}`,
