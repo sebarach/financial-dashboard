@@ -105,9 +105,12 @@ export default function TransactionsPage() {
     formType === 'transfer' ? c.slug === 'transfer' : c.type === formType
   );
 
-  // Available months from transactions
+  // Available months from transactions + always include current month
   const availableMonths = (() => {
     const months = new Set<string>();
+    // Always add current month
+    const now = new Date();
+    months.add(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
     transactions.forEach(tx => {
       const d = new Date(tx.date);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
