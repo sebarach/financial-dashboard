@@ -55,6 +55,7 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [selectedTx, setSelectedTx] = useState<typeof transactions[0] | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string>('all'); // 'all' | 'YYYY-MM'
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -104,9 +105,31 @@ export default function TransactionsPage() {
     formType === 'transfer' ? c.slug === 'transfer' : c.type === formType
   );
 
+  // Available months from transactions
+  const availableMonths = (() => {
+    const months = new Set<string>();
+    transactions.forEach(tx => {
+      const d = new Date(tx.date);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      months.add(key);
+    });
+    return Array.from(months).sort().reverse();
+  })();
+
+  const monthLabels: Record<string, string> = {
+    '01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril',
+    '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto',
+    '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre',
+  };
+
   // Filter transactions
   const filtered = transactions.filter(tx => {
     if (activeTab !== 'all' && tx.type !== activeTab) return false;
+    if (selectedMonth !== 'all') {
+      const d = new Date(tx.date);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      if (key !== selectedMonth) return false;
+    }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return tx.description.toLowerCase().includes(q) || tx.bank.name.toLowerCase().includes(q);
@@ -257,7 +280,7 @@ export default function TransactionsPage() {
         </div>
       </div>
 
-      {/* Tabs + Search */}
+      {/* Tabs + Month selector + Search */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)' }}>
           {(['all', 'income', 'expense', 'transfer'] as TabType[]).map(tab => (
@@ -275,8 +298,21 @@ export default function TransactionsPage() {
             </button>
           ))}
         </div>
-        <div className="flex-1 relative">
-          <input
+        <div className="flex gap-2 flex-1">
+          <select
+            value={selectedMonth}
+            onChange={e => setSelectedMonth(e.target.value)}
+            className="px-3 py-2.5 rounded-xl text-sm bg-[var(--deep-space-bg)] border border-white/5 focus:border-[var(--cyan-accent)]/40 text-[var(--text-primary)] outline-none transition-all appearance-none cursor-pointer"
+          >
+            <option value="all">Todos los meses</option>
+            {availableMonths.map(m => (
+              <option key={m} value={m}>
+                {monthLabels[m.split('-')[1]]} {m.split('-')[0]}
+              </option>
+            ))}
+          </select>
+          <div className="flex-1 relative">
+            <input
             type="text"
             placeholder="Buscar transacción..."
             value={searchQuery}
@@ -288,6 +324,7 @@ export default function TransactionsPage() {
               ✕
             </button>
           )}
+        </div>
         </div>
       </div>
 
