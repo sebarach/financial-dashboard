@@ -18,7 +18,7 @@ const typeIcon: Record<string, string> = {
 
 export function TransactionList({ transactions }: { transactions: Transaction[] }) {
   return (
-    <div className="card-futuristic-static">
+    <div className="card-static">
       <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
         Últimas Transacciones
       </h2>
@@ -32,9 +32,9 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
               <span
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                   tx.type === 'income'
-                    ? 'bg-[var(--cyan-accent)]/10 text-[var(--cyan-accent)]'
+                    ? 'bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]'
                     : tx.type === 'expense'
-                    ? 'bg-[var(--magenta-accent)]/10 text-[var(--magenta-accent)]'
+                    ? 'bg-[var(--accent-rose)]/10 text-[var(--accent-rose)]'
                     : 'bg-yellow-400/10 text-yellow-400'
                 }`}
               >
@@ -50,7 +50,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
             <div className="text-right">
               <p
                 className={`font-mono text-sm ${
-                  tx.amount >= 0 ? 'text-[var(--cyan-accent)]' : 'text-[var(--magenta-accent)]'
+                  tx.amount >= 0 ? 'text-[var(--accent-gold)]' : 'text-[var(--accent-rose)]'
                 }`}
               >
                 {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}

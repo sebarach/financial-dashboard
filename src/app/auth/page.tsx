@@ -50,8 +50,8 @@ export default function AuthPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold">
-            <span className="text-[var(--cyan-accent)]">Fin</span>
-            <span className="text-[var(--magenta-accent)]">Dash</span>
+            <span className="text-[var(--accent-gold)]">Fin</span>
+            <span className="text-[var(--accent-rose)]">Dash</span>
           </h1>
           <p className="text-sm text-gray-400 mt-1">Tu dashboard financiero personal</p>
         </div>
@@ -63,7 +63,7 @@ export default function AuthPage() {
             className="flex-1 py-2.5 text-sm font-medium transition-all"
             style={{
               background: tab === 'login' ? 'rgba(0, 240, 255, 0.12)' : 'transparent',
-              color: tab === 'login' ? 'var(--cyan-accent)' : '#888',
+              color: tab === 'login' ? 'var(--accent-gold)' : '#888',
             }}
           >
             Iniciar Sesión
@@ -73,7 +73,7 @@ export default function AuthPage() {
             className="flex-1 py-2.5 text-sm font-medium transition-all"
             style={{
               background: tab === 'register' ? 'rgba(0, 240, 255, 0.12)' : 'transparent',
-              color: tab === 'register' ? 'var(--cyan-accent)' : '#888',
+              color: tab === 'register' ? 'var(--accent-gold)' : '#888',
             }}
           >
             Crear Cuenta
@@ -132,7 +132,7 @@ export default function AuthPage() {
             disabled={loading}
             className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all"
             style={{
-              background: loading ? 'rgba(0,240,255,0.2)' : 'linear-gradient(135deg, var(--cyan-accent), var(--magenta-accent))',
+              background: loading ? 'rgba(0,240,255,0.2)' : 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
               color: '#0a0a1a',
             }}
           >

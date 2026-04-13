@@ -271,7 +271,7 @@ export default function TransactionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="glow-cyan text-[var(--cyan-accent)]">Transacciones</span>
+            <span className="text-[var(--accent-gold)]">Transacciones</span>
           </h1>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
             {filtered.length} transacciones
@@ -282,7 +282,7 @@ export default function TransactionsPage() {
             onClick={() => openModal('simple')}
             className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
             style={{
-              background: 'linear-gradient(135deg, var(--cyan-accent), var(--magenta-accent))',
+              background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
               color: '#0a0a1a',
             }}
           >
@@ -290,7 +290,7 @@ export default function TransactionsPage() {
           </button>
           <button
             onClick={() => openModal('transfer')}
-            className="px-4 py-2.5 rounded-xl text-sm font-medium border border-[var(--cyan-accent)]/30 text-[var(--cyan-accent)] hover:border-[var(--cyan-accent)]/60 transition-all"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium border border-[var(--accent-gold)]/30 text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/60 transition-all"
           >
             ⇄ Transferencia
           </button>
@@ -306,7 +306,7 @@ export default function TransactionsPage() {
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 activeTab === tab
-                  ? 'text-[var(--cyan-accent)]'
+                  ? 'text-[var(--accent-gold)]'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
               style={activeTab === tab ? { background: 'rgba(0, 240, 255, 0.08)' } : undefined}
@@ -319,7 +319,7 @@ export default function TransactionsPage() {
           <select
             value={selectedMonth}
             onChange={e => setSelectedMonth(e.target.value)}
-            className="px-3 py-2.5 rounded-xl text-sm bg-[var(--deep-space-bg)] border border-white/5 focus:border-[var(--cyan-accent)]/40 text-[var(--text-primary)] outline-none transition-all appearance-none cursor-pointer"
+            className="px-3 py-2.5 rounded-xl text-sm bg-[var(--bg-base)] border border-white/5 focus:border-[var(--accent-gold)]/40 text-[var(--text-primary)] outline-none transition-all appearance-none cursor-pointer"
           >
             <option value="">Todos los meses</option>
             {availableMonths.map(m => (
@@ -334,7 +334,7 @@ export default function TransactionsPage() {
             placeholder="Buscar transacción..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--cyan-accent)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
+            className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--accent-gold)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
           />
           {searchQuery && (
             <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-xs">
@@ -347,13 +347,13 @@ export default function TransactionsPage() {
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="card-futuristic-static py-3 px-4 flex items-center justify-between">
+        <div className="card-static py-3 px-4 flex items-center justify-between">
           <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Ingresos</span>
-          <span className="font-mono text-sm text-[var(--cyan-accent)] glow-cyan">{formatCLP(totals.income)}</span>
+          <span className="font-mono text-sm text-[var(--accent-gold)]">{formatCLP(totals.income)}</span>
         </div>
-        <div className="card-futuristic-static py-3 px-4 flex items-center justify-between">
+        <div className="card-static py-3 px-4 flex items-center justify-between">
           <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Gastos</span>
-          <span className="font-mono text-sm text-[var(--magenta-accent)] glow-magenta">{formatCLP(totals.expense)}</span>
+          <span className="font-mono text-sm text-[var(--accent-rose)]">{formatCLP(totals.expense)}</span>
         </div>
       </div>
 
@@ -363,7 +363,7 @@ export default function TransactionsPage() {
           <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card-futuristic-static text-center py-12">
+        <div className="card-static text-center py-12">
           <p className="text-3xl mb-3">📭</p>
           <p className="text-sm text-[var(--text-secondary)]">
             {searchQuery ? 'Sin resultados para esa búsqueda' : 'No hay transacciones aún'}
@@ -375,15 +375,15 @@ export default function TransactionsPage() {
             <div
               key={tx.id}
               onClick={() => setSelectedTx(tx)}
-              className="card-futuristic-static py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--cyan-accent)]/20 transition-all"
+              className="card-static py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--accent-gold)]/20 transition-all"
             >
               {/* Icon */}
               <div
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 ${
                   tx.type === 'income'
-                    ? 'bg-[var(--cyan-accent)]/10 text-[var(--cyan-accent)]'
+                    ? 'bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]'
                     : tx.type === 'expense'
-                    ? 'bg-[var(--magenta-accent)]/10 text-[var(--magenta-accent)]'
+                    ? 'bg-[var(--accent-rose)]/10 text-[var(--accent-rose)]'
                     : 'bg-yellow-400/10 text-yellow-400'
                 }`}
               >
@@ -401,7 +401,7 @@ export default function TransactionsPage() {
 
               {/* Amount */}
               <div className="text-right flex-shrink-0">
-                <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-[var(--cyan-accent)]' : 'text-[var(--magenta-accent)]'}`}>
+                <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-[var(--accent-gold)]' : 'text-[var(--accent-rose)]'}`}>
                   {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}
                 </p>
                 <p className="text-[10px] text-[var(--text-secondary)]">
@@ -436,7 +436,7 @@ export default function TransactionsPage() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedTx(null)} />
           <div
             className="relative w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl"
-            style={{ background: 'var(--deep-space-surface)', border: '1px solid rgba(0, 240, 255, 0.15)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
           >
             <div className="p-5 sm:p-6">
               {/* Header */}
@@ -453,13 +453,13 @@ export default function TransactionsPage() {
               {/* Amount hero */}
               <div className="text-center mb-6 py-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
                 <p className={`text-3xl font-mono font-bold ${
-                  selectedTx.amount >= 0 ? 'text-[var(--cyan-accent)] glow-cyan' : 'text-[var(--magenta-accent)] glow-magenta'
+                  selectedTx.amount >= 0 ? 'text-[var(--accent-gold)]' : 'text-[var(--accent-rose)]'
                 }`}>
                   {selectedTx.amount >= 0 ? '+' : ''}{formatCLP(selectedTx.amount)}
                 </p>
                 <p className={`text-xs mt-2 uppercase tracking-widest ${
-                  selectedTx.type === 'income' ? 'text-[var(--cyan-accent)]' :
-                  selectedTx.type === 'expense' ? 'text-[var(--magenta-accent)]' : 'text-yellow-400'
+                  selectedTx.type === 'income' ? 'text-[var(--accent-gold)]' :
+                  selectedTx.type === 'expense' ? 'text-[var(--accent-rose)]' : 'text-yellow-400'
                 }`}>
                   {selectedTx.type === 'income' ? '↑ Ingreso' : selectedTx.type === 'expense' ? '↓ Gasto' : '⇄ Transferencia'}
                 </p>
@@ -541,14 +541,14 @@ export default function TransactionsPage() {
           {/* Modal content */}
           <div
             className="relative w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
-            style={{ background: 'var(--deep-space-surface)', border: '1px solid rgba(0, 240, 255, 0.15)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
           >
             {/* Success overlay */}
             {success && (
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--cyan-accent)] glow-cyan font-medium">
+                  <p className="text-[var(--accent-gold)] font-medium">
                     {mode === 'transfer' ? 'Transferencia creada' : 'Transacción creada'}
                   </p>
                 </div>
@@ -591,9 +591,9 @@ export default function TransactionsPage() {
                           className={`py-2.5 rounded-xl text-xs font-medium transition-all border ${
                             formType === t
                               ? t === 'income'
-                                ? 'border-[var(--cyan-accent)]/50 text-[var(--cyan-accent)] bg-[var(--cyan-accent)]/5'
+                                ? 'border-[var(--accent-gold)]/50 text-[var(--accent-gold)] bg-[var(--accent-gold)]/5'
                                 : t === 'expense'
-                                ? 'border-[var(--magenta-accent)]/50 text-[var(--magenta-accent)] bg-[var(--magenta-accent)]/5'
+                                ? 'border-[var(--accent-rose)]/50 text-[var(--accent-rose)] bg-[var(--accent-rose)]/5'
                                 : 'border-yellow-400/50 text-yellow-400 bg-yellow-400/5'
                               : 'border-white/5 text-[var(--text-secondary)] hover:border-white/10'
                           }`}
@@ -617,7 +617,7 @@ export default function TransactionsPage() {
                         onChange={e => setFormAmount(e.target.value)}
 
                         className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
-                          fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                          fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                         }`}
                       />
                       {formAmount && !fieldErrors.amount && (
@@ -638,7 +638,7 @@ export default function TransactionsPage() {
 
                       maxLength={120}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
-                        fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                        fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     />
                     {fieldErrors.description && <p className="text-red-400 text-xs mt-1">{fieldErrors.description}</p>}
@@ -653,8 +653,8 @@ export default function TransactionsPage() {
                         value={formAccountId}
                         onChange={e => setFormAccountId(e.target.value)}
 
-                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
-                          fieldErrors.account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                          fieldErrors.account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                         }`}
                       >
                         <option value="">Seleccionar...</option>
@@ -670,8 +670,8 @@ export default function TransactionsPage() {
                         value={formCategoryId}
                         onChange={e => setFormCategoryId(e.target.value)}
 
-                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
-                          fieldErrors.category_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                          fieldErrors.category_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                         }`}
                       >
                         <option value="">Seleccionar...</option>
@@ -692,8 +692,8 @@ export default function TransactionsPage() {
                       onChange={e => setFormDate(e.target.value)}
 
                       max={new Date().toISOString().split('T')[0]}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
-                        fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
+                        fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     />
                     {fieldErrors.transaction_date && <p className="text-red-400 text-xs mt-1">{fieldErrors.transaction_date}</p>}
@@ -709,8 +709,8 @@ export default function TransactionsPage() {
                       value={formFromAccount}
                       onChange={e => setFormFromAccount(e.target.value)}
 
-                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
-                        fieldErrors.from_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                        fieldErrors.from_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     >
                       <option value="">Seleccionar...</option>
@@ -722,7 +722,7 @@ export default function TransactionsPage() {
                   </div>
 
                   <div className="flex justify-center mb-4">
-                    <span className="text-[var(--cyan-accent)] text-lg">↓</span>
+                    <span className="text-[var(--accent-gold)] text-lg">↓</span>
                   </div>
 
                   {/* To account */}
@@ -732,8 +732,8 @@ export default function TransactionsPage() {
                       value={formToAccount}
                       onChange={e => setFormToAccount(e.target.value)}
 
-                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
-                        fieldErrors.to_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                        fieldErrors.to_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     >
                       <option value="">Seleccionar...</option>
@@ -757,7 +757,7 @@ export default function TransactionsPage() {
                         onChange={e => setFormTransferAmount(e.target.value)}
 
                         className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
-                          fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                          fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                         }`}
                       />
                     </div>
@@ -775,7 +775,7 @@ export default function TransactionsPage() {
 
                       maxLength={120}
                       className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
-                        fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                        fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     />
                     {fieldErrors.description && <p className="text-red-400 text-xs mt-1">{fieldErrors.description}</p>}
@@ -790,8 +790,8 @@ export default function TransactionsPage() {
                       onChange={e => setFormTransferDate(e.target.value)}
 
                       max={new Date().toISOString().split('T')[0]}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--deep-space-bg)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
-                        fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--cyan-accent)]/40'
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
+                        fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
                       }`}
                     />
                     {fieldErrors.transaction_date && <p className="text-red-400 text-xs mt-1">{fieldErrors.transaction_date}</p>}
@@ -809,7 +809,7 @@ export default function TransactionsPage() {
                     : 'hover:shadow-lg'
                 }`}
                 style={{
-                  background: 'linear-gradient(135deg, var(--cyan-accent), var(--magenta-accent))',
+                  background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
                   color: '#0a0a1a',
                 }}
               >

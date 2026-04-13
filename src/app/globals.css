@@ -1,5 +1,5 @@
 /* ============================================
-   Global Styles — Deep Space Futurista · Mobile First
+   FinDash — Editorial Finance · Refined Dark
    ============================================ */
 
 @tailwind base;
@@ -7,15 +7,22 @@
 @tailwind utilities;
 
 :root {
-  --deep-space-bg: #0a0a1a;
-  --deep-space-surface: #111128;
-  --deep-space-card: rgba(17, 17, 40, 0.6);
-  --cyan-accent: #00f0ff;
-  --magenta-accent: #ff00aa;
-  --cyan-glow: rgba(0, 240, 255, 0.15);
-  --magenta-glow: rgba(255, 0, 170, 0.15);
-  --text-primary: #e8e8ff;
-  --text-secondary: #8888aa;
+  --bg-base: #09090b;
+  --bg-surface: #111114;
+  --bg-elevated: #18181b;
+  --bg-card: rgba(24, 24, 27, 0.7);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(251, 191, 36, 0.2);
+  --accent-gold: #fbbf24;
+  --accent-gold-dim: rgba(251, 191, 36, 0.12);
+  --accent-emerald: #34d399;
+  --accent-rose: #fb7185;
+  --text-primary: #fafafa;
+  --text-secondary: #71717a;
+  --text-tertiary: #52525b;
+
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
 }
 
 * {
@@ -23,45 +30,98 @@
 }
 
 body {
-  background: var(--deep-space-bg);
+  background: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Prevent pull-to-refresh on mobile */
 html { overflow-y: scroll; overscroll-behavior-y: contain; }
 
-/* Animated gradient border */
-@keyframes borderGlow {
-  0%, 100% { border-color: var(--cyan-accent); box-shadow: 0 0 15px var(--cyan-glow); }
-  50%      { border-color: var(--magenta-accent); box-shadow: 0 0 15px var(--magenta-glow); }
+/* ---- Animations ---- */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.card-futuristic {
-  @apply backdrop-blur-md rounded-2xl p-4 sm:p-6;
-  background: var(--deep-space-card);
-  border: 1px solid transparent;
-  animation: borderGlow 6s ease-in-out infinite;
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-.card-futuristic-static {
-  @apply backdrop-blur-md rounded-2xl p-4 sm:p-6;
-  background: var(--deep-space-card);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
 }
 
-.glow-cyan { text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow); }
-.glow-magenta { text-shadow: 0 0 10px var(--magenta-glow), 0 0 20px var(--magenta-glow); }
+/* ---- Card System ---- */
 
-/* Touch-friendly tap targets */
-a, button { min-height: 44px; }
+.card {
+  @apply rounded-2xl p-4 sm:p-5;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(20px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-/* Scrollbar */
+.card:hover {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.04);
+}
+
+.card-static {
+  @apply rounded-2xl p-4 sm:p-5;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(20px);
+}
+
+/* ---- Staggered Entrance ---- */
+
+.stagger > * {
+  animation: fadeInUp 0.5s ease-out both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger > *:nth-child(6) { animation-delay: 0.30s; }
+
+/* ---- Value Text ---- */
+
+.value-mono {
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+/* ---- Loading Skeleton ---- */
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ---- Scrollbar ---- */
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
 
-/* Safe area for notch phones */
+/* ---- Safe Area ---- */
 body { padding-top: env(safe-area-inset-top); }
+
+/* ---- Touch Targets ---- */
+a, button { min-height: 44px; }
+
+/* ---- Utility ---- */
+.text-gold { color: var(--accent-gold); }
+.text-emerald { color: var(--accent-emerald); }
+.text-rose { color: var(--accent-rose); }
+.border-accent { border-color: var(--border-accent); }

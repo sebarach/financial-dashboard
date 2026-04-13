@@ -15,7 +15,7 @@ const typeLabels: Record<string, string> = {
 
 export function AccountsList({ accounts }: { accounts: Account[] }) {
   return (
-    <div className="card-futuristic-static">
+    <div className="card-static">
       <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
         Cuentas
       </h2>

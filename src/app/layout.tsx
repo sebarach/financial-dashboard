@@ -29,6 +29,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200..900;1,9..40,200..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
         <link rel="icon" href="/financial-dashboard/icons/icon.svg" type="image/svg+xml" />
         <link rel="icon" href="/financial-dashboard/icons/icon-192.png" sizes="192x192" type="image/png" />
         <link rel="apple-touch-icon" href="/financial-dashboard/icons/icon-192.png" />

@@ -20,7 +20,7 @@ function formatCLP(n: number) {
 
 export function CategoryBreakdown({ breakdown }: { breakdown: CategoryBreakdownType[] }) {
   return (
-    <div className="card-futuristic-static">
+    <div className="card-static">
       <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
         Gastos por Categoría
       </h2>

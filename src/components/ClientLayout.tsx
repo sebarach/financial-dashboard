@@ -9,8 +9,6 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
   const pathname = usePathname();
 
-  const router = useRouter();
-
   useEffect(() => {
     if (isLoading) return;
     const basePath = process.env.NODE_ENV === 'production' ? '/financial-dashboard' : '';
@@ -21,21 +19,18 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [user, isLoading, pathname]);
 
-  // Show auth page without layout
   if (pathname === '/auth' || pathname.startsWith('/auth/')) {
     return <>{children}</>;
   }
 
-  // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-deep)' }}>
-        <div className="inline-block w-8 h-8 border-2 border-[var(--cyan-accent)] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-base)' }}>
+        <div className="skeleton w-8 h-8 rounded-full" style={{ animation: 'pulse-subtle 1.2s ease-in-out infinite' }} />
       </div>
     );
   }
 
-  // Not authenticated
   if (!user) return null;
 
   return <AppLayout>{children}</AppLayout>;
@@ -47,11 +42,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
 
   useEffect(() => {
-    // Register SW
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/financial-dashboard/sw.js').catch(() => {});
     }
-    // Mobile detection
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
@@ -65,8 +58,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* Desktop: sidebar fixed left, content with margin */}
-      {/* Mobile: top bar + drawer */}
+      {/* Desktop sidebar */}
       {!isMobile && (
         <div className="fixed top-0 left-0 h-screen z-30">
           <Sidebar onNavigate={() => setDrawerOpen(false)} />
@@ -78,30 +70,32 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         <header
           className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-4"
           style={{
-            background: 'rgba(10, 10, 26, 0.95)',
-            backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid rgba(0, 240, 255, 0.08)',
+            background: 'rgba(9, 9, 11, 0.92)',
+            backdropFilter: 'blur(16px)',
+            borderBottom: '1px solid var(--border-subtle)',
           }}
         >
           <button
             onClick={() => setDrawerOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl text-[var(--cyan-accent)] text-xl"
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
           >
-            ☰
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M3 12H21M3 6H21M3 18H21" />
+            </svg>
           </button>
-          <span className="text-sm font-semibold tracking-wide">
-            <span className="text-[var(--cyan-accent)]">Fin</span>
-            <span className="text-[var(--magenta-accent)]">Dash</span>
+          <span className="text-sm font-semibold tracking-tight">
+            <span className="text-gold">Fin</span>
+            <span className="text-[var(--text-primary)]">Dash</span>
           </span>
           <button
             onClick={signOut}
-            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-[var(--cyan-accent)]/30 flex-shrink-0"
+            className="w-8 h-8 rounded-full overflow-hidden ring-1 ring-[var(--border-subtle)] flex-shrink-0"
             title={`Logout (${fullName})`}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[var(--cyan-accent)] to-[var(--magenta-accent)] flex items-center justify-center text-[10px] font-bold text-[#0a0a1a]">
+              <div className="w-full h-full bg-[var(--accent-gold-dim)] flex items-center justify-center text-[10px] font-bold text-gold">
                 {initials}
               </div>
             )}
@@ -120,7 +114,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile sidebar drawer */}
       {isMobile && (
         <div
-          className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ${
+          className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ease-out ${
             drawerOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
