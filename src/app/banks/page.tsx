@@ -197,7 +197,7 @@ export default function BanksPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="text-[var(--accent-gold)]">Bancos</span>
+            <span className="text-[var(--green-bright)]">Bancos</span>
           </h1>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
             {banks.length} banco{banks.length !== 1 ? 's' : ''} registrado{banks.length !== 1 ? 's' : ''}
@@ -207,7 +207,7 @@ export default function BanksPage() {
           onClick={openCreateModal}
           className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
           style={{
-            background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
+            background: 'linear-gradient(135deg, var(--green-bright), var(--green-mid))',
             color: '#0a0a1a',
           }}
         >
@@ -222,7 +222,7 @@ export default function BanksPage() {
           placeholder="Buscar banco..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--accent-gold)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
+          className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
         />
         {searchQuery && (
           <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-xs">✕</button>
@@ -287,7 +287,7 @@ export default function BanksPage() {
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(bank)}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-[var(--text-secondary)] hover:text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/30 transition-all"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-[var(--text-secondary)] hover:text-[var(--green-bright)] hover:border-[var(--green-bright)]/30 transition-all"
                   title="Editar"
                 >
                   ✎
@@ -328,7 +328,7 @@ export default function BanksPage() {
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--accent-gold)] font-medium">
+                  <p className="text-[var(--green-bright)] font-medium">
                     {editMode ? 'Banco actualizado' : 'Banco creado'}
                   </p>
                 </div>
@@ -391,7 +391,7 @@ export default function BanksPage() {
 
                   maxLength={50}
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
-                    fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                    fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
                 {fieldErrors.name && <p className="text-red-400 text-xs mt-1">{fieldErrors.name}</p>}
@@ -407,7 +407,7 @@ export default function BanksPage() {
                   onChange={e => setFormSlug(e.target.value)}
 
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
-                    fieldErrors.slug ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                    fieldErrors.slug ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
                 {fieldErrors.slug && <p className="text-red-400 text-xs mt-1">{fieldErrors.slug}</p>}
@@ -431,7 +431,7 @@ export default function BanksPage() {
 
                       maxLength={7}
                       className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
-                        fieldErrors.color ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                        fieldErrors.color ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
                   </div>
@@ -453,7 +453,7 @@ export default function BanksPage() {
 
                       maxLength={7}
                       className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
-                        fieldErrors.color_alt ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                        fieldErrors.color_alt ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
                   </div>
@@ -469,7 +469,7 @@ export default function BanksPage() {
                   placeholder="https://..."
                   value={formLogoUrl}
                   onChange={e => setFormLogoUrl(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all border-white/10 focus:border-[var(--accent-gold)]/40"
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all border-white/10 focus:border-[var(--green-bright)]/40"
                 />
               </div>
 
@@ -481,7 +481,7 @@ export default function BanksPage() {
                   submitting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
                 }`}
                 style={{
-                  background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
+                  background: 'linear-gradient(135deg, var(--green-bright), var(--green-mid))',
                   color: '#0a0a1a',
                 }}
               >

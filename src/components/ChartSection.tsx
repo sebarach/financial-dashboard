@@ -23,7 +23,7 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
               {/* Income bar */}
               <div className="flex-1 flex flex-col justify-end">
                 <div
-                  className="rounded-t-sm bg-[var(--accent-gold)]/80 transition-all duration-500"
+                  className="rounded-t-sm bg-[var(--green-bright)]/80 transition-all duration-500"
                   style={{
                     height: `${(point.income / maxVal) * 100}%`,
                     minHeight: point.income > 0 ? '4px' : '0',
@@ -34,7 +34,7 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
               {/* Expense bar */}
               <div className="flex-1 flex flex-col justify-end">
                 <div
-                  className="rounded-t-sm bg-[var(--accent-rose)]/80 transition-all duration-500"
+                  className="rounded-t-sm bg-[var(--accent-negative)]/80 transition-all duration-500"
                   style={{
                     height: `${(point.expense / maxVal) * 100}%`,
                     minHeight: point.expense > 0 ? '4px' : '0',
@@ -49,11 +49,11 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
       </div>
       <div className="flex gap-4 mt-3 justify-center">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-[var(--accent-gold)]/80" />
+          <div className="w-3 h-3 rounded-sm bg-[var(--green-bright)]/80" />
           <span className="text-xs text-[var(--text-secondary)]">Ingresos</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-[var(--accent-rose)]/80" />
+          <div className="w-3 h-3 rounded-sm bg-[var(--accent-negative)]/80" />
           <span className="text-xs text-[var(--text-secondary)]">Gastos</span>
         </div>
       </div>

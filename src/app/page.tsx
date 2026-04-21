@@ -25,8 +25,8 @@ export default function DashboardPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-3">
           <div className="skeleton w-10 h-10 mx-auto rounded-full" style={{ animation: 'pulse-subtle 1.2s ease-in-out infinite' }} />
-          <p className="text-[var(--text-tertiary)] text-xs tracking-[0.1em] uppercase font-medium">
-            Cargando
+          <p className="text-[var(--text-tertiary)] text-[10px] tracking-[0.14em] uppercase font-mono">
+            loading...
           </p>
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh] px-4">
         <div className="card-static text-center max-w-md">
-          <p className="text-rose text-lg mb-2">Error</p>
+          <p className="text-[var(--accent-negative)] text-lg font-mono mb-2">{'>'} error</p>
           <p className="text-[var(--text-secondary)] text-sm">{error}</p>
         </div>
       </div>
@@ -59,20 +59,20 @@ export default function DashboardPage() {
   const dateStr = today.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10" style={{ animation: 'fadeInUp 0.4s ease-out' }}>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 scanline-overlay" style={{ animation: 'fadeInUp 0.3s ease-out' }}>
       {/* Header */}
       <header className="mb-8 sm:mb-12">
-        <p className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-[0.12em] font-medium mb-1">
-          {dateStr}
+        <p className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.14em] font-mono mb-1.5">
+          {'>'} {dateStr}
         </p>
-        <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           {firstName ? (
-            <>{getGreeting()}, <span className="text-gold">{firstName}</span></>
+            <>{getGreeting()}, <span className="text-matrix">{firstName}</span></>
           ) : (
-            <>FinDash</>
+            <><span className="text-matrix">fin</span><span className="text-[var(--text-secondary)]">dash</span></>
           )}
         </h1>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">
+        <p className="text-[var(--text-tertiary)] text-xs mt-1 font-mono">
           {summary.period.from} → {summary.period.to}
         </p>
       </header>

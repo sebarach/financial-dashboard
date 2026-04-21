@@ -224,7 +224,7 @@ export default function AccountsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="text-[var(--accent-gold)]">Cuentas</span>
+            <span className="text-[var(--green-bright)]">Cuentas</span>
           </h1>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
             {activeCount} cuenta{activeCount !== 1 ? 's' : ''} activa{activeCount !== 1 ? 's' : ''}
@@ -234,7 +234,7 @@ export default function AccountsPage() {
           onClick={openCreateModal}
           className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
           style={{
-            background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
+            background: 'linear-gradient(135deg, var(--green-bright), var(--green-mid))',
             color: '#0a0a1a',
           }}
         >
@@ -246,7 +246,7 @@ export default function AccountsPage() {
       <div className="card-static py-4 px-5 mb-5 flex items-center justify-between">
         <div>
           <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">Balance Total</p>
-          <p className="font-mono text-2xl text-[var(--accent-gold)] mt-1">{formatCLP(totalBalance)}</p>
+          <p className="font-mono text-2xl text-[var(--green-bright)] mt-1">{formatCLP(totalBalance)}</p>
         </div>
         <div className="text-right">
           <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">Cuentas</p>
@@ -262,7 +262,7 @@ export default function AccountsPage() {
             onClick={() => setActiveFilter(tab)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeFilter === tab
-                ? 'text-[var(--accent-gold)]'
+                ? 'text-[var(--green-bright)]'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
             style={activeFilter === tab ? { background: 'rgba(0, 240, 255, 0.08)' } : undefined}
@@ -316,7 +316,7 @@ export default function AccountsPage() {
 
               {/* Balance */}
               <div className="text-right flex-shrink-0">
-                <p className={`font-mono text-sm ${account.balance >= 0 ? 'text-[var(--accent-gold)]' : 'text-[var(--accent-rose)]'}`}>
+                <p className={`font-mono text-sm ${account.balance >= 0 ? 'text-[var(--green-bright)]' : 'text-[var(--accent-negative)]'}`}>
                   {formatCLP(account.balance)}
                 </p>
                 <p className="text-[10px] text-[var(--text-secondary)]">{account.currency}</p>
@@ -326,7 +326,7 @@ export default function AccountsPage() {
               <div className="flex gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(account)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-[var(--text-secondary)] hover:text-[var(--accent-gold)] hover:border-[var(--accent-gold)]/30 transition-all"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-[var(--text-secondary)] hover:text-[var(--green-bright)] hover:border-[var(--green-bright)]/30 transition-all"
                   title="Editar"
                 >
                   ✎
@@ -374,7 +374,7 @@ export default function AccountsPage() {
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--accent-gold)] font-medium">
+                  <p className="text-[var(--green-bright)] font-medium">
                     {editMode ? 'Cuenta actualizada' : 'Cuenta creada'}
                   </p>
                 </div>
@@ -440,7 +440,7 @@ export default function AccountsPage() {
                       onClick={() => { setFormAccountType(key); setFieldErrors(prev => { const { account_type, ...rest } = prev; return rest; }); }}
                       className={`py-2.5 rounded-xl text-xs font-medium transition-all border ${
                         formAccountType === key
-                          ? 'border-[var(--accent-gold)]/50 text-[var(--accent-gold)] bg-[var(--accent-gold)]/5'
+                          ? 'border-[var(--green-bright)]/50 text-[var(--green-bright)] bg-[var(--green-bright)]/5'
                           : 'border-white/5 text-[var(--text-secondary)] hover:border-white/10'
                       }`}
                     >
@@ -462,7 +462,7 @@ export default function AccountsPage() {
 
                   maxLength={60}
                   className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
-                    fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                    fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
                 {fieldErrors.name && <p className="text-red-400 text-xs mt-1">{fieldErrors.name}</p>}
@@ -482,7 +482,7 @@ export default function AccountsPage() {
                     onChange={e => setFormBalance(e.target.value)}
 
                     className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
-                      fieldErrors.balance ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--accent-gold)]/40'
+                      fieldErrors.balance ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                     }`}
                   />
                   {formBalance && !fieldErrors.balance && (
@@ -508,7 +508,7 @@ export default function AccountsPage() {
                   submitting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
                 }`}
                 style={{
-                  background: 'linear-gradient(135deg, var(--accent-gold), #f59e0b)',
+                  background: 'linear-gradient(135deg, var(--green-bright), var(--green-mid))',
                   color: '#0a0a1a',
                 }}
               >

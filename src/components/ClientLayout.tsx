@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -68,35 +68,35 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       {isMobile && (
         <header
-          className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-4"
+          className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center justify-between px-4"
           style={{
-            background: 'rgba(9, 9, 11, 0.92)',
-            backdropFilter: 'blur(16px)',
+            background: 'rgba(2, 2, 2, 0.95)',
+            backdropFilter: 'blur(12px)',
             borderBottom: '1px solid var(--border-subtle)',
           }}
         >
           <button
             onClick={() => setDrawerOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded text-[var(--text-secondary)] hover:text-[var(--green-bright)] transition-colors"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M3 12H21M3 6H21M3 18H21" />
             </svg>
           </button>
-          <span className="text-sm font-semibold tracking-tight">
-            <span className="text-gold">Fin</span>
-            <span className="text-[var(--text-primary)]">Dash</span>
+          <span className="text-sm font-semibold tracking-tight font-mono">
+            <span className="text-[var(--green-bright)]">fin</span>
+            <span className="text-[var(--text-secondary)]">dash</span>
           </span>
           <button
             onClick={signOut}
-            className="w-8 h-8 rounded-full overflow-hidden ring-1 ring-[var(--border-subtle)] flex-shrink-0"
+            className="w-7 h-7 rounded-full overflow-hidden border border-[var(--border-accent)] flex-shrink-0"
             title={`Logout (${fullName})`}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             ) : (
-              <div className="w-full h-full bg-[var(--accent-gold-dim)] flex items-center justify-center text-[10px] font-bold text-gold">
-                {initials}
+              <div className="w-full h-full bg-[var(--green-ghost)] flex items-center justify-center text-[9px] font-bold text-[var(--green-bright)] font-mono">
+                {initials.toLowerCase()}
               </div>
             )}
           </button>
@@ -106,7 +106,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile drawer overlay */}
       {isMobile && drawerOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
           onClick={() => setDrawerOpen(false)}
         />
       )}
@@ -123,7 +123,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main content */}
-      <div className={`${isMobile ? 'mt-14' : 'md:ml-[220px]'} transition-all duration-300`}>
+      <div className={`${isMobile ? 'mt-12' : 'md:ml-[220px]'} transition-all duration-300`}>
         {children}
       </div>
     </>

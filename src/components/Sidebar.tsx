@@ -5,14 +5,38 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
 const menuItems = [
-  { label: 'Dashboard', href: '/', icon: DashboardIcon },
-  { label: 'Transacciones', href: '/transactions', icon: TransaccionesIcon },
-  { label: 'Cuentas', href: '/accounts', icon: CuentasIcon },
-  { label: 'Presupuesto', href: '/budget', icon: PresupuestoIcon },
-  { label: 'Inversiones', href: '/investments', icon: InversionesIcon },
-  { label: 'Reportes', href: '/reports', icon: ReportesIcon },
-  { label: 'Configuración', href: '/settings', icon: ConfigIcon },
+  { label: 'Dashboard', href: '/', icon: IconGrid },
+  { label: 'Transacciones', href: '/transactions', icon: IconArrows },
+  { label: 'Cuentas', href: '/accounts', icon: IconCard },
+  { label: 'Presupuesto', href: '/budget', icon: IconClock },
+  { label: 'Inversiones', href: '/investments', icon: IconTrend },
+  { label: 'Reportes', href: '/reports', icon: IconChart },
+  { label: 'Configuración', href: '/settings', icon: IconGear },
 ];
+
+/* ---- Minimal SVG Icons ---- */
+
+function IconGrid({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>;
+}
+function IconArrows({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><path d="M17 3L21 7L17 11" /><path d="M21 7H9" /><path d="M7 21L3 17L7 13" /><path d="M3 17H15" /></svg>;
+}
+function IconCard({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10H22" /></svg>;
+}
+function IconClock({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 3V12L16.5 16.5" /></svg>;
+}
+function IconTrend({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>;
+}
+function IconChart({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20V14" /></svg>;
+}
+function IconGear({ active }: { active: boolean }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></svg>;
+}
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -24,76 +48,6 @@ function getGreeting(): string {
 function getFirstName(name?: string): string {
   if (!name) return '';
   return name.split(' ')[0];
-}
-
-/* ---- SVG Icons (24x24, stroke) ---- */
-
-function DashboardIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
-    </svg>
-  );
-}
-
-function TransaccionesIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17 3L21 7L17 11" />
-      <path d="M21 7H9" />
-      <path d="M7 21L3 17L7 13" />
-      <path d="M3 17H15" />
-    </svg>
-  );
-}
-
-function CuentasIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="5" width="20" height="14" rx="2" />
-      <path d="M2 10H22" />
-    </svg>
-  );
-}
-
-function PresupuestoIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 3V12L16.5 16.5" />
-    </svg>
-  );
-}
-
-function InversionesIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-      <polyline points="16 7 22 7 22 13" />
-    </svg>
-  );
-}
-
-function ReportesIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M18 20V10" />
-      <path d="M12 20V4" />
-      <path d="M6 20V14" />
-    </svg>
-  );
-}
-
-function ConfigIcon({ active }: { active: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
-    </svg>
-  );
 }
 
 interface SidebarProps {
@@ -120,18 +74,19 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 h-16 border-b border-[var(--border-subtle)]">
-        <div className="w-8 h-8 rounded-lg bg-[var(--accent-gold-dim)] flex items-center justify-center">
-          <span className="text-[var(--accent-gold)] font-bold text-sm">F</span>
+      <div className="flex items-center gap-2.5 px-5 h-14 border-b border-[var(--border-subtle)]">
+        <div className="w-7 h-7 rounded bg-[var(--green-ghost)] flex items-center justify-center border border-[var(--border-accent)]">
+          <span className="text-[var(--green-bright)] font-mono font-bold text-xs">$</span>
         </div>
-        <span className="text-sm font-semibold tracking-tight text-[var(--text-primary)]">
-          FinDash
+        <span className="text-sm font-semibold tracking-tight font-mono">
+          <span className="text-[var(--green-bright)]">fin</span>
+          <span className="text-[var(--text-secondary)]">dash</span>
         </span>
       </div>
 
       {/* Greeting */}
       <div className="px-5 pt-5 pb-3">
-        <p className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.12em] font-medium">{getGreeting()}</p>
+        <p className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.14em] font-mono">{getGreeting()}</p>
         <p className="text-sm font-semibold text-[var(--text-primary)] mt-1 truncate">{firstName}</p>
       </div>
 
@@ -144,10 +99,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               key={item.href}
               href={item.href}
               onClick={onNavigate}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] transition-all duration-200 ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] transition-all duration-200 ${
                 active
-                  ? 'text-[var(--accent-gold)] bg-[var(--accent-gold-dim)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.03]'
+                  ? 'text-[var(--green-bright)] bg-[var(--green-ghost)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--green-mid)] hover:bg-[var(--green-subtle)]'
               }`}
             >
               <item.icon active={active} />
@@ -164,17 +119,17 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             <img
               src={avatarUrl}
               alt={fullName}
-              className="w-8 h-8 rounded-full object-cover ring-1 ring-[var(--border-subtle)]"
+              className="w-8 h-8 rounded-full object-cover ring-1 ring-[var(--border-accent)]"
               referrerPolicy="no-referrer"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-[var(--accent-gold-dim)] flex items-center justify-center text-[10px] font-bold text-[var(--accent-gold)]">
-              {initials}
+            <div className="w-8 h-8 rounded-full bg-[var(--green-ghost)] flex items-center justify-center text-[10px] font-bold text-[var(--green-bright)] font-mono border border-[var(--border-accent)]">
+              {initials.toLowerCase()}
             </div>
           )}
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-[var(--text-primary)] truncate">{fullName}</p>
-            <p className="text-[10px] text-[var(--text-tertiary)] truncate">{email}</p>
+            <p className="text-[10px] text-[var(--text-tertiary)] truncate font-mono">{email}</p>
           </div>
         </div>
       </div>

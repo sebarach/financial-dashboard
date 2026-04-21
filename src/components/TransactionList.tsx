@@ -32,9 +32,9 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
               <span
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                   tx.type === 'income'
-                    ? 'bg-[var(--accent-gold)]/10 text-[var(--accent-gold)]'
+                    ? 'bg-[var(--green-bright)]/10 text-[var(--green-bright)]'
                     : tx.type === 'expense'
-                    ? 'bg-[var(--accent-rose)]/10 text-[var(--accent-rose)]'
+                    ? 'bg-[var(--accent-negative)]/10 text-[var(--accent-negative)]'
                     : 'bg-yellow-400/10 text-yellow-400'
                 }`}
               >
@@ -50,7 +50,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
             <div className="text-right">
               <p
                 className={`font-mono text-sm ${
-                  tx.amount >= 0 ? 'text-[var(--accent-gold)]' : 'text-[var(--accent-rose)]'
+                  tx.amount >= 0 ? 'text-[var(--green-bright)]' : 'text-[var(--accent-negative)]'
                 }`}
               >
                 {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}

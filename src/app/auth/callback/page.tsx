@@ -28,7 +28,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-deep)' }}>
       <div className="text-center">
-        <div className="inline-block w-8 h-8 border-2 border-[var(--accent-gold)] border-t-transparent rounded-full animate-spin" />
+        <div className="inline-block w-8 h-8 border-2 border-[var(--green-bright)] border-t-transparent rounded-full animate-spin" />
         <p className="text-gray-400 mt-4 text-sm">Verificando...</p>
       </div>
     </div>
