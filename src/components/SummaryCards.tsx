@@ -49,17 +49,17 @@ export function SummaryCards({ summary }: { summary: DashboardSummary }) {
                 {card.label}
               </p>
               <span className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-mono ${
-                card.type === 'positive' ? 'text-primary bg-green-ghost' :
-                card.type === 'negative' ? 'text-destructive bg-destructive/10' :
-                'text-primary bg-green-ghost'
+                card.type === 'positive' ? 'text-[#00ff41] bg-green-ghost' :
+                card.type === 'negative' ? 'text-[#ff3b3b] bg-red-500/10' :
+                'text-[#00ff41] bg-green-ghost'
               }`}>
                 {card.symbol}
               </span>
             </div>
             <p className={`value-mono text-lg sm:text-xl font-bold ${
-              card.type === 'positive' ? 'text-primary' :
-              card.type === 'negative' ? 'text-destructive' :
-              'text-primary'
+              card.type === 'positive' ? 'text-[#00ff41]' :
+              card.type === 'negative' ? 'text-[#ff3b3b]' :
+              'text-[#00ff41]'
             }`}>
               {card.value}
             </p>

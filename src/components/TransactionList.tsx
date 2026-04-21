@@ -36,7 +36,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
                 <span
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                     tx.type === 'income'
-                      ? 'bg-primary/10 text-primary'
+                      ? 'bg-[rgba(0,255,65,0.08)] text-[#00ff41]'
                       : tx.type === 'expense'
                       ? 'bg-destructive/10 text-destructive'
                       : 'bg-yellow-400/10 text-yellow-400'
@@ -52,7 +52,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
                 </div>
               </div>
               <div className="text-right">
-                <p className={`value-mono text-sm ${tx.amount >= 0 ? 'text-primary' : 'text-destructive'}`}>
+                <p className={`value-mono text-sm ${tx.amount >= 0 ? 'text-[#00ff41]' : 'text-[#ff3b3b]'}`}>
                   {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}
                 </p>
                 {tx.status === 'pending' && (

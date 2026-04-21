@@ -20,7 +20,7 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
               <div className="flex items-end gap-1 h-36 w-full">
                 <div className="flex-1 flex flex-col justify-end">
                   <div
-                    className="rounded-t-sm bg-primary/80 transition-all duration-500"
+                    className="rounded-t-sm bg-[#00ff41]/80 transition-all duration-500"
                     style={{
                       height: `${(point.income / maxVal) * 100}%`,
                       minHeight: point.income > 0 ? '4px' : '0',
@@ -29,7 +29,7 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
                 </div>
                 <div className="flex-1 flex flex-col justify-end">
                   <div
-                    className="rounded-t-sm bg-destructive/80 transition-all duration-500"
+                    className="rounded-t-sm bg-[#ff3b3b]/80 transition-all duration-500"
                     style={{
                       height: `${(point.expense / maxVal) * 100}%`,
                       minHeight: point.expense > 0 ? '4px' : '0',
@@ -43,11 +43,11 @@ export function ChartSection({ data }: { data: ChartDataPoint[] }) {
         </div>
         <div className="flex gap-4 mt-3 justify-center">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-primary/80" />
+            <div className="w-3 h-3 rounded-sm bg-[#00ff41]/80" />
             <span className="text-xs text-muted-foreground">Ingresos</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-destructive/80" />
+            <div className="w-3 h-3 rounded-sm bg-[#ff3b3b]/80" />
             <span className="text-xs text-muted-foreground">Gastos</span>
           </div>
         </div>

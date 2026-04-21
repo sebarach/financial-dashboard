@@ -74,7 +74,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           <span className="text-primary font-mono font-bold text-xs">$</span>
         </div>
         <span className="text-sm font-semibold tracking-tight font-mono">
-          <span className="text-primary">fin</span>
+          <span className="text-[#00ff41]">fin</span>
           <span className="text-muted-foreground">dash</span>
         </span>
       </div>
@@ -97,8 +97,8 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200',
                 active
-                  ? 'text-primary bg-green-ghost'
-                  : 'text-muted-foreground hover:text-primary hover:bg-green-ghost/50'
+                  ? 'text-[#00ff41] bg-green-ghost'
+                  : 'text-[#4a7a4a] hover:text-[#00ff41] hover:bg-green-ghost/50'
               )}
             >
               <item.icon active={active} />
@@ -115,7 +115,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         <div className="flex items-center gap-2.5">
           <Avatar className="size-8 ring-1 ring-[var(--border-accent)]">
             {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} />}
-            <AvatarFallback className="bg-green-ghost text-primary text-[10px] font-mono font-bold">
+            <AvatarFallback className="bg-green-ghost text-[#00ff41] text-[10px] font-mono font-bold">
               {initials.toLowerCase()}
             </AvatarFallback>
           </Avatar>

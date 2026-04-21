@@ -86,7 +86,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           </Sheet>
 
           <span className="text-sm font-semibold tracking-tight font-mono">
-            <span className="text-primary">fin</span>
+            <span className="text-[#00ff41]">fin</span>
             <span className="text-muted-foreground">dash</span>
           </span>
 
