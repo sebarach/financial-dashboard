@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const menuItems = [
   { label: 'Dashboard', href: '/', icon: IconGrid },
@@ -13,8 +16,6 @@ const menuItems = [
   { label: 'Reportes', href: '/reports', icon: IconChart },
   { label: 'Configuración', href: '/settings', icon: IconGear },
 ];
-
-/* ---- Minimal SVG Icons ---- */
 
 function IconGrid({ active }: { active: boolean }) {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2 : 1.5} strokeLinecap="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>;
@@ -66,28 +67,22 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const initials = fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
   return (
-    <aside
-      className="w-[220px] h-screen flex flex-col"
-      style={{
-        background: 'var(--bg-surface)',
-        borderRight: '1px solid var(--border-subtle)',
-      }}
-    >
+    <aside className="w-[220px] h-screen flex flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 h-14 border-b border-[var(--border-subtle)]">
-        <div className="w-7 h-7 rounded bg-[var(--green-ghost)] flex items-center justify-center border border-[var(--border-accent)]">
-          <span className="text-[var(--green-bright)] font-mono font-bold text-xs">$</span>
+      <div className="flex items-center gap-2.5 px-5 h-14 border-b border-sidebar-border">
+        <div className="w-7 h-7 rounded bg-green-ghost flex items-center justify-center border border-[var(--border-accent)]">
+          <span className="text-primary font-mono font-bold text-xs">$</span>
         </div>
         <span className="text-sm font-semibold tracking-tight font-mono">
-          <span className="text-[var(--green-bright)]">fin</span>
-          <span className="text-[var(--text-secondary)]">dash</span>
+          <span className="text-primary">fin</span>
+          <span className="text-muted-foreground">dash</span>
         </span>
       </div>
 
       {/* Greeting */}
       <div className="px-5 pt-5 pb-3">
         <p className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-[0.14em] font-mono">{getGreeting()}</p>
-        <p className="text-sm font-semibold text-[var(--text-primary)] mt-1 truncate">{firstName}</p>
+        <p className="text-sm font-semibold text-foreground mt-1 truncate">{firstName}</p>
       </div>
 
       {/* Nav */}
@@ -99,37 +94,34 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               key={item.href}
               href={item.href}
               onClick={onNavigate}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] transition-all duration-200 ${
+              className={cn(
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200',
                 active
-                  ? 'text-[var(--green-bright)] bg-[var(--green-ghost)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--green-mid)] hover:bg-[var(--green-subtle)]'
-              }`}
+                  ? 'text-primary bg-green-ghost'
+                  : 'text-muted-foreground hover:text-primary hover:bg-green-ghost/50'
+              )}
             >
               <item.icon active={active} />
-              <span className="font-medium">{item.label}</span>
+              <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
+      <Separator />
+
       {/* User card */}
-      <div className="px-4 pb-4 border-t border-[var(--border-subtle)] pt-3">
+      <div className="px-4 pb-4 pt-3">
         <div className="flex items-center gap-2.5">
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt={fullName}
-              className="w-8 h-8 rounded-full object-cover ring-1 ring-[var(--border-accent)]"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-[var(--green-ghost)] flex items-center justify-center text-[10px] font-bold text-[var(--green-bright)] font-mono border border-[var(--border-accent)]">
+          <Avatar className="size-8 ring-1 ring-[var(--border-accent)]">
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} />}
+            <AvatarFallback className="bg-green-ghost text-primary text-[10px] font-mono font-bold">
               {initials.toLowerCase()}
-            </div>
-          )}
+            </AvatarFallback>
+          </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-[var(--text-primary)] truncate">{fullName}</p>
-            <p className="text-[10px] text-[var(--text-tertiary)] truncate font-mono">{email}</p>
+            <p className="text-xs font-medium text-foreground truncate">{fullName}</p>
+            <p className="text-[10px] text-muted-foreground truncate font-mono">{email}</p>
           </div>
         </div>
       </div>

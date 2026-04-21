@@ -1,6 +1,7 @@
 'use client';
 
 import type { DashboardSummary } from '@/types';
+import { Card, CardContent } from '@/components/ui/card';
 
 function formatCLP(amount: number): string {
   return new Intl.NumberFormat('es-CL', {
@@ -41,27 +42,29 @@ export function SummaryCards({ summary }: { summary: DashboardSummary }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 stagger">
       {cards.map((card) => (
-        <div key={card.label} className="card group cursor-default">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--text-tertiary)] font-medium font-mono">
-              {card.label}
-            </p>
-            <span className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-mono ${
-              card.type === 'positive' ? 'text-[var(--accent-positive)] bg-[var(--green-ghost)]' :
-              card.type === 'negative' ? 'text-[var(--accent-negative)] bg-red-500/10' :
-              'text-[var(--green-bright)] bg-[var(--green-ghost)]'
+        <Card key={card.label} className="card-glow transition-all duration-300 border-border hover:border-[var(--border-accent)]">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground font-mono">
+                {card.label}
+              </p>
+              <span className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-mono ${
+                card.type === 'positive' ? 'text-primary bg-green-ghost' :
+                card.type === 'negative' ? 'text-destructive bg-destructive/10' :
+                'text-primary bg-green-ghost'
+              }`}>
+                {card.symbol}
+              </span>
+            </div>
+            <p className={`value-mono text-lg sm:text-xl font-bold ${
+              card.type === 'positive' ? 'text-primary' :
+              card.type === 'negative' ? 'text-destructive' :
+              'text-primary'
             }`}>
-              {card.symbol}
-            </span>
-          </div>
-          <p className={`value-mono text-lg sm:text-xl font-bold ${
-            card.type === 'positive' ? 'text-[var(--accent-positive)]' :
-            card.type === 'negative' ? 'text-[var(--accent-negative)]' :
-            'text-[var(--green-bright)]'
-          }`}>
-            {card.value}
-          </p>
-        </div>
+              {card.value}
+            </p>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

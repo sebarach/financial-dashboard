@@ -197,9 +197,9 @@ export default function BanksPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="text-[var(--green-bright)]">Bancos</span>
+            <span className="text-primary">Bancos</span>
           </h1>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {banks.length} banco{banks.length !== 1 ? 's' : ''} registrado{banks.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -222,10 +222,10 @@ export default function BanksPage() {
           placeholder="Buscar banco..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
+          className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground placeholder:text-muted-foreground/50 outline-none transition-all"
         />
         {searchQuery && (
-          <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-xs">✕</button>
+          <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">✕</button>
         )}
       </div>
 
@@ -235,9 +235,9 @@ export default function BanksPage() {
           <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card-static text-center py-12">
+        <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm text-center py-12">
           <p className="text-3xl mb-3">🏛</p>
-          <p className="text-sm text-[var(--text-secondary)]">
+          <p className="text-sm text-muted-foreground">
             {searchQuery ? 'Sin resultados' : 'No hay bancos registrados'}
           </p>
         </div>
@@ -246,7 +246,7 @@ export default function BanksPage() {
           {filtered.map(bank => (
             <div
               key={bank.id}
-              className="card-static py-4 px-4 group relative overflow-hidden"
+              className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-4 px-4 group relative overflow-hidden"
             >
               {/* Background glow */}
               <div
@@ -270,8 +270,8 @@ export default function BanksPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{bank.name}</p>
-                  <p className="text-xs text-[var(--text-secondary)] font-mono">{bank.slug}</p>
-                  <p className="text-[10px] text-[var(--text-secondary)]/50 mt-0.5">
+                  <p className="text-xs text-muted-foreground font-mono">{bank.slug}</p>
+                  <p className="text-[10px] text-muted-foreground/50 mt-0.5">
                     {bank.accountCount} cuenta{bank.accountCount !== 1 ? 's' : ''}
                   </p>
                 </div>
@@ -287,7 +287,7 @@ export default function BanksPage() {
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(bank)}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-[var(--text-secondary)] hover:text-[var(--green-bright)] hover:border-[var(--green-bright)]/30 transition-all"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-muted-foreground hover:text-primary hover:border-[var(--green-bright)]/30 transition-all"
                   title="Editar"
                 >
                   ✎
@@ -295,12 +295,12 @@ export default function BanksPage() {
                 {deleteConfirm === bank.id ? (
                   <div className="flex gap-1">
                     <button onClick={() => handleDelete(bank.id)} className="px-2 py-1 rounded-lg text-[10px] bg-red-500/20 text-red-400">Sí</button>
-                    <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-[var(--text-secondary)]">No</button>
+                    <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-muted-foreground">No</button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setDeleteConfirm(bank.id)}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-[var(--text-secondary)] hover:text-red-400 hover:border-red-400/30 transition-all"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] border border-white/5 text-muted-foreground hover:text-red-400 hover:border-red-400/30 transition-all"
                     title="Eliminar"
                   >
                     🗑
@@ -321,14 +321,14 @@ export default function BanksPage() {
 
           <div
             className="relative w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid hsl(var(--border))' }}
           >
             {/* Success overlay */}
             {success && (
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--green-bright)] font-medium">
+                  <p className="text-primary font-medium">
                     {editMode ? 'Banco actualizado' : 'Banco creado'}
                   </p>
                 </div>
@@ -338,12 +338,12 @@ export default function BanksPage() {
             <div className="p-5 sm:p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">
+                <h2 className="text-lg font-bold text-foreground">
                   {editMode ? '✎ Editar Banco' : '+ Nuevo Banco'}
                 </h2>
                 <button
                   onClick={() => !submitting && setShowModal(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/5"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground border border-white/5"
                 >
                   ✕
                 </button>
@@ -371,7 +371,7 @@ export default function BanksPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">{formName || 'Nombre del Banco'}</p>
-                    <p className="text-xs text-[var(--text-secondary)] font-mono">{formSlug || 'slug'}</p>
+                    <p className="text-xs text-muted-foreground font-mono">{formSlug || 'slug'}</p>
                   </div>
                   <div className="ml-auto flex gap-1.5">
                     <span className="w-5 h-5 rounded-full border border-white/10 transition-all" style={{ background: formColor }} />
@@ -382,7 +382,7 @@ export default function BanksPage() {
 
               {/* Name */}
               <div className="mb-4">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Nombre</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Nombre</label>
                 <input
                   type="text"
                   placeholder="Ej: Banco de Chile, Santander..."
@@ -390,7 +390,7 @@ export default function BanksPage() {
                   onChange={e => handleNameChange(e.target.value)}
 
                   maxLength={50}
-                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all ${
                     fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
@@ -399,14 +399,14 @@ export default function BanksPage() {
 
               {/* Slug */}
               <div className="mb-4">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Slug</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Slug</label>
                 <input
                   type="text"
                   placeholder="banco-de-chile"
                   value={formSlug}
                   onChange={e => setFormSlug(e.target.value)}
 
-                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground font-mono placeholder:text-muted-foreground/30 outline-none transition-all ${
                     fieldErrors.slug ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
@@ -416,7 +416,7 @@ export default function BanksPage() {
               {/* Colors */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Color Primario</label>
+                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Color Primario</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
@@ -430,7 +430,7 @@ export default function BanksPage() {
                       onChange={e => setFormColor(e.target.value)}
 
                       maxLength={7}
-                      className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
+                      className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-foreground font-mono outline-none transition-all ${
                         fieldErrors.color ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
@@ -438,7 +438,7 @@ export default function BanksPage() {
                   {fieldErrors.color && <p className="text-red-400 text-xs mt-1">{fieldErrors.color}</p>}
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Color Secundario</label>
+                  <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Color Secundario</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
@@ -452,7 +452,7 @@ export default function BanksPage() {
                       onChange={e => setFormColorAlt(e.target.value)}
 
                       maxLength={7}
-                      className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
+                      className={`flex-1 px-3 py-2 rounded-xl text-xs bg-transparent border-b-2 text-foreground font-mono outline-none transition-all ${
                         fieldErrors.color_alt ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
@@ -463,13 +463,13 @@ export default function BanksPage() {
 
               {/* Logo URL */}
               <div className="mb-6">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Logo URL (opcional)</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Logo URL (opcional)</label>
                 <input
                   type="url"
                   placeholder="https://..."
                   value={formLogoUrl}
                   onChange={e => setFormLogoUrl(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all border-white/10 focus:border-[var(--green-bright)]/40"
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all border-white/10 focus:border-[var(--green-bright)]/40"
                 />
               </div>
 

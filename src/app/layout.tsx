@@ -7,12 +7,12 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#0a0a1a',
+  themeColor: '#020202',
 };
 
 export const metadata: Metadata = {
   title: 'FinDash — Dashboard Financiero',
-  description: 'Dashboard financiero con estética futurista',
+  description: 'Dashboard financiero · Matrix Terminal',
   manifest: '/financial-dashboard/manifest.json',
   appleWebApp: {
     capable: true,

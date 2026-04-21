@@ -224,9 +224,9 @@ export default function AccountsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="text-[var(--green-bright)]">Cuentas</span>
+            <span className="text-primary">Cuentas</span>
           </h1>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {activeCount} cuenta{activeCount !== 1 ? 's' : ''} activa{activeCount !== 1 ? 's' : ''}
           </p>
         </div>
@@ -243,14 +243,14 @@ export default function AccountsPage() {
       </div>
 
       {/* Balance total */}
-      <div className="card-static py-4 px-5 mb-5 flex items-center justify-between">
+      <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-4 px-5 mb-5 flex items-center justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">Balance Total</p>
-          <p className="font-mono text-2xl text-[var(--green-bright)] mt-1">{formatCLP(totalBalance)}</p>
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Balance Total</p>
+          <p className="font-mono text-2xl text-primary mt-1">{formatCLP(totalBalance)}</p>
         </div>
         <div className="text-right">
-          <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">Cuentas</p>
-          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1">{filtered.length}</p>
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Cuentas</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{filtered.length}</p>
         </div>
       </div>
 
@@ -262,8 +262,8 @@ export default function AccountsPage() {
             onClick={() => setActiveFilter(tab)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeFilter === tab
-                ? 'text-[var(--green-bright)]'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
             style={activeFilter === tab ? { background: 'rgba(0, 240, 255, 0.08)' } : undefined}
           >
@@ -278,9 +278,9 @@ export default function AccountsPage() {
           <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card-static text-center py-12">
+        <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm text-center py-12">
           <p className="text-3xl mb-3">🏦</p>
-          <p className="text-sm text-[var(--text-secondary)]">
+          <p className="text-sm text-muted-foreground">
             {activeFilter !== 'all' ? 'No hay cuentas en este filtro' : 'No hay cuentas aún. Crea una para empezar.'}
           </p>
         </div>
@@ -289,7 +289,7 @@ export default function AccountsPage() {
           {filtered.map(account => (
             <div
               key={account.id}
-              className="card-static py-4 px-4 flex items-center gap-4 group"
+              className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-4 px-4 flex items-center gap-4 group"
             >
               {/* Bank color indicator */}
               <div
@@ -305,10 +305,10 @@ export default function AccountsPage() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{account.name}</p>
-                <p className="text-xs text-[var(--text-secondary)]">
+                <p className="text-xs text-muted-foreground">
                   {account.bank.name} · {ACCOUNT_TYPES[account.account_type]?.label || account.account_type}
                 </p>
-                <p className="text-[10px] text-[var(--text-secondary)]/50 mt-0.5">
+                <p className="text-[10px] text-muted-foreground/50 mt-0.5">
                   Actualizada: {formatDate(account.last_sync)}
                   {!account.is_active && <span className="ml-2 text-red-400">inactiva</span>}
                 </p>
@@ -316,24 +316,24 @@ export default function AccountsPage() {
 
               {/* Balance */}
               <div className="text-right flex-shrink-0">
-                <p className={`font-mono text-sm ${account.balance >= 0 ? 'text-[var(--green-bright)]' : 'text-[var(--accent-negative)]'}`}>
+                <p className={`font-mono text-sm ${account.balance >= 0 ? 'text-primary' : 'text-destructive'}`}>
                   {formatCLP(account.balance)}
                 </p>
-                <p className="text-[10px] text-[var(--text-secondary)]">{account.currency}</p>
+                <p className="text-[10px] text-muted-foreground">{account.currency}</p>
               </div>
 
               {/* Actions */}
               <div className="flex gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(account)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-[var(--text-secondary)] hover:text-[var(--green-bright)] hover:border-[var(--green-bright)]/30 transition-all"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-muted-foreground hover:text-primary hover:border-[var(--green-bright)]/30 transition-all"
                   title="Editar"
                 >
                   ✎
                 </button>
                 <button
                   onClick={() => toggleActive(account)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-[var(--text-secondary)] hover:text-yellow-400 hover:border-yellow-400/30 transition-all"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-muted-foreground hover:text-yellow-400 hover:border-yellow-400/30 transition-all"
                   title={account.is_active ? 'Desactivar' : 'Activar'}
                 >
                   {account.is_active ? '◉' : '○'}
@@ -341,12 +341,12 @@ export default function AccountsPage() {
                 {deleteConfirm === account.id ? (
                   <div className="flex gap-1">
                     <button onClick={() => handleDelete(account.id)} className="px-2 py-1 rounded-lg text-[10px] bg-red-500/20 text-red-400">Sí</button>
-                    <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-[var(--text-secondary)]">No</button>
+                    <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-muted-foreground">No</button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setDeleteConfirm(account.id)}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-[var(--text-secondary)] hover:text-red-400 hover:border-red-400/30 transition-all"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-xs border border-white/5 text-muted-foreground hover:text-red-400 hover:border-red-400/30 transition-all"
                     title="Eliminar"
                   >
                     🗑
@@ -367,14 +367,14 @@ export default function AccountsPage() {
 
           <div
             className="relative w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid hsl(var(--border))' }}
           >
             {/* Success overlay */}
             {success && (
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--green-bright)] font-medium">
+                  <p className="text-primary font-medium">
                     {editMode ? 'Cuenta actualizada' : 'Cuenta creada'}
                   </p>
                 </div>
@@ -384,12 +384,12 @@ export default function AccountsPage() {
             <div className="p-5 sm:p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">
+                <h2 className="text-lg font-bold text-foreground">
                   {editMode ? '✎ Editar Cuenta' : '+ Nueva Cuenta'}
                 </h2>
                 <button
                   onClick={() => !submitting && setShowModal(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/5"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground border border-white/5"
                 >
                   ✕
                 </button>
@@ -404,7 +404,7 @@ export default function AccountsPage() {
 
               {/* Bank selector */}
               <div className="mb-5">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Banco</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Banco</label>
                 <div className="grid grid-cols-2 gap-2">
                   {banks.map(bank => (
                     <button
@@ -414,7 +414,7 @@ export default function AccountsPage() {
                       className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all border flex items-center gap-2 ${
                         formBankId === bank.id
                           ? 'border-white/30 text-white'
-                          : 'border-white/5 text-[var(--text-secondary)] hover:border-white/10'
+                          : 'border-white/5 text-muted-foreground hover:border-white/10'
                       }`}
                       style={formBankId === bank.id ? { background: `${bank.color}15`, borderColor: `${bank.color}40` } : undefined}
                     >
@@ -431,7 +431,7 @@ export default function AccountsPage() {
 
               {/* Account type */}
               <div className="mb-5">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Tipo de Cuenta</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Tipo de Cuenta</label>
                 <div className="grid grid-cols-3 gap-2">
                   {Object.entries(ACCOUNT_TYPES).map(([key, { label, icon }]) => (
                     <button
@@ -440,8 +440,8 @@ export default function AccountsPage() {
                       onClick={() => { setFormAccountType(key); setFieldErrors(prev => { const { account_type, ...rest } = prev; return rest; }); }}
                       className={`py-2.5 rounded-xl text-xs font-medium transition-all border ${
                         formAccountType === key
-                          ? 'border-[var(--green-bright)]/50 text-[var(--green-bright)] bg-[var(--green-bright)]/5'
-                          : 'border-white/5 text-[var(--text-secondary)] hover:border-white/10'
+                          ? 'border-[var(--green-bright)]/50 text-primary bg-primary/5'
+                          : 'border-white/5 text-muted-foreground hover:border-white/10'
                       }`}
                     >
                       {icon} {label.split(' ').pop()}
@@ -453,7 +453,7 @@ export default function AccountsPage() {
 
               {/* Account name */}
               <div className="mb-4">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Nombre de la Cuenta</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Nombre de la Cuenta</label>
                 <input
                   type="text"
                   placeholder="Ej: Cuenta Corriente Principal, Ahorro Vacaciones..."
@@ -461,19 +461,19 @@ export default function AccountsPage() {
                   onChange={e => setFormName(e.target.value)}
 
                   maxLength={60}
-                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
+                  className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all ${
                     fieldErrors.name ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                   }`}
                 />
                 {fieldErrors.name && <p className="text-red-400 text-xs mt-1">{fieldErrors.name}</p>}
-                <p className="text-[10px] text-[var(--text-secondary)] mt-1 text-right">{formName.length}/60</p>
+                <p className="text-[10px] text-muted-foreground mt-1 text-right">{formName.length}/60</p>
               </div>
 
               {/* Balance */}
               <div className="mb-4">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Saldo Inicial (CLP)</label>
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Saldo Inicial (CLP)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-sm">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                   <input
                     type="number"
                     inputMode="numeric"
@@ -481,7 +481,7 @@ export default function AccountsPage() {
                     value={formBalance}
                     onChange={e => setFormBalance(e.target.value)}
 
-                    className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
+                    className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground font-mono outline-none transition-all ${
                       fieldErrors.balance ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                     }`}
                   />
@@ -494,8 +494,8 @@ export default function AccountsPage() {
 
               {/* Currency (info only for now) */}
               <div className="mb-6">
-                <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Moneda</label>
-                <div className="px-4 py-3 rounded-xl text-sm border-b-2 border-white/10 text-[var(--text-secondary)]">
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Moneda</label>
+                <div className="px-4 py-3 rounded-xl text-sm border-b-2 border-white/10 text-muted-foreground">
                   🇨🇱 Pesos Chilenos (CLP)
                 </div>
               </div>

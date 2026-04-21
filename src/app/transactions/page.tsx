@@ -271,9 +271,9 @@ export default function TransactionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">
-            <span className="text-[var(--green-bright)]">Transacciones</span>
+            <span className="text-primary">Transacciones</span>
           </h1>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {filtered.length} transacciones
           </p>
         </div>
@@ -290,7 +290,7 @@ export default function TransactionsPage() {
           </button>
           <button
             onClick={() => openModal('transfer')}
-            className="px-4 py-2.5 rounded-xl text-sm font-medium border border-[var(--green-bright)]/30 text-[var(--green-bright)] hover:border-[var(--green-bright)]/60 transition-all"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium border border-[var(--green-bright)]/30 text-primary hover:border-[var(--green-bright)]/60 transition-all"
           >
             ⇄ Transferencia
           </button>
@@ -306,8 +306,8 @@ export default function TransactionsPage() {
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 activeTab === tab
-                  ? 'text-[var(--green-bright)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
               style={activeTab === tab ? { background: 'rgba(0, 240, 255, 0.08)' } : undefined}
             >
@@ -319,7 +319,7 @@ export default function TransactionsPage() {
           <select
             value={selectedMonth}
             onChange={e => setSelectedMonth(e.target.value)}
-            className="px-3 py-2.5 rounded-xl text-sm bg-[var(--bg-base)] border border-white/5 focus:border-[var(--green-bright)]/40 text-[var(--text-primary)] outline-none transition-all appearance-none cursor-pointer"
+            className="px-3 py-2.5 rounded-xl text-sm bg-[hsl(var(--background))] border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground outline-none transition-all appearance-none cursor-pointer"
           >
             <option value="">Todos los meses</option>
             {availableMonths.map(m => (
@@ -334,10 +334,10 @@ export default function TransactionsPage() {
             placeholder="Buscar transacción..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50 outline-none transition-all"
+            className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground placeholder:text-muted-foreground/50 outline-none transition-all"
           />
           {searchQuery && (
-            <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-xs">
+            <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
               ✕
             </button>
           )}
@@ -347,13 +347,13 @@ export default function TransactionsPage() {
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="card-static py-3 px-4 flex items-center justify-between">
-          <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Ingresos</span>
-          <span className="font-mono text-sm text-[var(--green-bright)]">{formatCLP(totals.income)}</span>
+        <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-3 px-4 flex items-center justify-between">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider">Ingresos</span>
+          <span className="font-mono text-sm text-primary">{formatCLP(totals.income)}</span>
         </div>
-        <div className="card-static py-3 px-4 flex items-center justify-between">
-          <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Gastos</span>
-          <span className="font-mono text-sm text-[var(--accent-negative)]">{formatCLP(totals.expense)}</span>
+        <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-3 px-4 flex items-center justify-between">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider">Gastos</span>
+          <span className="font-mono text-sm text-destructive">{formatCLP(totals.expense)}</span>
         </div>
       </div>
 
@@ -363,9 +363,9 @@ export default function TransactionsPage() {
           <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card-static text-center py-12">
+        <div className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm text-center py-12">
           <p className="text-3xl mb-3">📭</p>
-          <p className="text-sm text-[var(--text-secondary)]">
+          <p className="text-sm text-muted-foreground">
             {searchQuery ? 'Sin resultados para esa búsqueda' : 'No hay transacciones aún'}
           </p>
         </div>
@@ -375,15 +375,15 @@ export default function TransactionsPage() {
             <div
               key={tx.id}
               onClick={() => setSelectedTx(tx)}
-              className="card-static py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--green-bright)]/20 transition-all"
+              className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--green-bright)]/20 transition-all"
             >
               {/* Icon */}
               <div
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 ${
                   tx.type === 'income'
-                    ? 'bg-[var(--green-bright)]/10 text-[var(--green-bright)]'
+                    ? 'bg-primary/10 text-primary'
                     : tx.type === 'expense'
-                    ? 'bg-[var(--accent-negative)]/10 text-[var(--accent-negative)]'
+                    ? 'bg-destructive/10 text-destructive'
                     : 'bg-yellow-400/10 text-yellow-400'
                 }`}
               >
@@ -393,7 +393,7 @@ export default function TransactionsPage() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm truncate">{tx.description}</p>
-                <p className="text-xs text-[var(--text-secondary)]">
+                <p className="text-xs text-muted-foreground">
                   {tx.bank.name} · {formatDate(tx.date)} {formatTime(tx.date)}
                   {tx.status === 'pending' && <span className="ml-2 text-yellow-400">pendiente</span>}
                 </p>
@@ -401,10 +401,10 @@ export default function TransactionsPage() {
 
               {/* Amount */}
               <div className="text-right flex-shrink-0">
-                <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-[var(--green-bright)]' : 'text-[var(--accent-negative)]'}`}>
+                <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-primary' : 'text-destructive'}`}>
                   {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}
                 </p>
-                <p className="text-[10px] text-[var(--text-secondary)]">
+                <p className="text-[10px] text-muted-foreground">
                   {CATEGORY_LABELS[tx.category] || tx.category}
                 </p>
               </div>
@@ -413,12 +413,12 @@ export default function TransactionsPage() {
               {deleteConfirm === tx.id ? (
                 <div className="flex gap-1 flex-shrink-0">
                   <button onClick={() => handleDelete(tx.id)} className="px-2 py-1 rounded-lg text-[10px] bg-red-500/20 text-red-400">Sí</button>
-                  <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-[var(--text-secondary)]">No</button>
+                  <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-muted-foreground">No</button>
                 </div>
               ) : (
                 <button
                   onClick={() => setDeleteConfirm(tx.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-secondary)] hover:text-red-400 text-xs flex-shrink-0"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-red-400 text-xs flex-shrink-0"
                 >
                   🗑
                 </button>
@@ -436,15 +436,15 @@ export default function TransactionsPage() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedTx(null)} />
           <div
             className="relative w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid hsl(var(--border))' }}
           >
             <div className="p-5 sm:p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">Detalle</h2>
+                <h2 className="text-lg font-bold text-foreground">Detalle</h2>
                 <button
                   onClick={() => setSelectedTx(null)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/5"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground border border-white/5"
                 >
                   ✕
                 </button>
@@ -453,13 +453,13 @@ export default function TransactionsPage() {
               {/* Amount hero */}
               <div className="text-center mb-6 py-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.3)' }}>
                 <p className={`text-3xl font-mono font-bold ${
-                  selectedTx.amount >= 0 ? 'text-[var(--green-bright)]' : 'text-[var(--accent-negative)]'
+                  selectedTx.amount >= 0 ? 'text-primary' : 'text-destructive'
                 }`}>
                   {selectedTx.amount >= 0 ? '+' : ''}{formatCLP(selectedTx.amount)}
                 </p>
                 <p className={`text-xs mt-2 uppercase tracking-widest ${
-                  selectedTx.type === 'income' ? 'text-[var(--green-bright)]' :
-                  selectedTx.type === 'expense' ? 'text-[var(--accent-negative)]' : 'text-yellow-400'
+                  selectedTx.type === 'income' ? 'text-primary' :
+                  selectedTx.type === 'expense' ? 'text-destructive' : 'text-yellow-400'
                 }`}>
                   {selectedTx.type === 'income' ? '↑ Ingreso' : selectedTx.type === 'expense' ? '↓ Gasto' : '⇄ Transferencia'}
                 </p>
@@ -468,34 +468,34 @@ export default function TransactionsPage() {
               {/* Details */}
               <div className="space-y-3">
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Descripción</span>
-                  <span className="text-sm text-[var(--text-primary)] text-right max-w-[60%]">{selectedTx.description}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Descripción</span>
+                  <span className="text-sm text-foreground text-right max-w-[60%]">{selectedTx.description}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Categoría</span>
-                  <span className="text-sm text-[var(--text-primary)]">{CATEGORY_LABELS[selectedTx.category] || selectedTx.category}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Categoría</span>
+                  <span className="text-sm text-foreground">{CATEGORY_LABELS[selectedTx.category] || selectedTx.category}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Cuenta</span>
-                  <span className="text-sm text-[var(--text-primary)]">{selectedTx.bank.name}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Cuenta</span>
+                  <span className="text-sm text-foreground">{selectedTx.bank.name}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Fecha</span>
-                  <span className="text-sm text-[var(--text-primary)]">{formatDate(selectedTx.date)}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Fecha</span>
+                  <span className="text-sm text-foreground">{formatDate(selectedTx.date)}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Hora</span>
-                  <span className="text-sm text-[var(--text-primary)]">{formatTime(selectedTx.date)}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Hora</span>
+                  <span className="text-sm text-foreground">{formatTime(selectedTx.date)}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-white/5">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Estado</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Estado</span>
                   <span className={`text-sm ${selectedTx.status === 'completed' ? 'text-green-400' : selectedTx.status === 'pending' ? 'text-yellow-400' : 'text-red-400'}`}>
                     {selectedTx.status === 'completed' ? '✓ Completada' : selectedTx.status === 'pending' ? '◐ Pendiente' : '✗ Fallida'}
                   </span>
                 </div>
                 <div className="flex justify-between py-2">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">ID</span>
-                  <span className="text-[10px] text-[var(--text-secondary)] font-mono">{selectedTx.id}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">ID</span>
+                  <span className="text-[10px] text-muted-foreground font-mono">{selectedTx.id}</span>
                 </div>
               </div>
 
@@ -506,7 +506,7 @@ export default function TransactionsPage() {
                     <button onClick={() => { handleDelete(selectedTx.id); setSelectedTx(null); }} className="flex-1 py-2.5 rounded-xl text-sm font-medium bg-red-500/20 text-red-400 border border-red-400/30">
                       Confirmar eliminación
                     </button>
-                    <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-[var(--text-secondary)]">
+                    <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-muted-foreground">
                       Cancelar
                     </button>
                   </>
@@ -520,7 +520,7 @@ export default function TransactionsPage() {
                 )}
                 <button
                   onClick={() => setSelectedTx(null)}
-                  className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all"
+                  className="flex-1 py-2.5 rounded-xl text-sm font-medium border border-white/10 text-muted-foreground hover:text-foreground transition-all"
                 >
                   Cerrar
                 </button>
@@ -541,14 +541,14 @@ export default function TransactionsPage() {
           {/* Modal content */}
           <div
             className="relative w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid hsl(var(--border))' }}
           >
             {/* Success overlay */}
             {success && (
               <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl" style={{ background: 'rgba(10, 10, 26, 0.9)' }}>
                 <div className="text-center">
                   <p className="text-4xl mb-3">✅</p>
-                  <p className="text-[var(--green-bright)] font-medium">
+                  <p className="text-primary font-medium">
                     {mode === 'transfer' ? 'Transferencia creada' : 'Transacción creada'}
                   </p>
                 </div>
@@ -558,12 +558,12 @@ export default function TransactionsPage() {
             <div className="p-5 sm:p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">
+                <h2 className="text-lg font-bold text-foreground">
                   {mode === 'transfer' ? '⇄ Nueva Transferencia' : '+ Nueva Transacción'}
                 </h2>
                 <button
                   onClick={() => !submitting && setShowModal(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-white/5"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground border border-white/5"
                 >
                   ✕
                 </button>
@@ -581,7 +581,7 @@ export default function TransactionsPage() {
                 <>
                   {/* Type selector */}
                   <div className="mb-5">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Tipo</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Tipo</label>
                     <div className="grid grid-cols-3 gap-2">
                       {(['expense', 'income', 'transfer'] as const).map(t => (
                         <button
@@ -591,11 +591,11 @@ export default function TransactionsPage() {
                           className={`py-2.5 rounded-xl text-xs font-medium transition-all border ${
                             formType === t
                               ? t === 'income'
-                                ? 'border-[var(--green-bright)]/50 text-[var(--green-bright)] bg-[var(--green-bright)]/5'
+                                ? 'border-[var(--green-bright)]/50 text-primary bg-primary/5'
                                 : t === 'expense'
-                                ? 'border-[var(--accent-negative)]/50 text-[var(--accent-negative)] bg-[var(--accent-negative)]/5'
+                                ? 'border-[var(--accent-negative)]/50 text-destructive bg-destructive/5'
                                 : 'border-yellow-400/50 text-yellow-400 bg-yellow-400/5'
-                              : 'border-white/5 text-[var(--text-secondary)] hover:border-white/10'
+                              : 'border-white/5 text-muted-foreground hover:border-white/10'
                           }`}
                         >
                           {t === 'income' ? '↑ Ingreso' : t === 'expense' ? '↓ Gasto' : '⇄ Transfer.'}
@@ -606,9 +606,9 @@ export default function TransactionsPage() {
 
                   {/* Amount */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Monto (CLP)</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Monto (CLP)</label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-sm">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                       <input
                         type="number"
                         inputMode="numeric"
@@ -616,7 +616,7 @@ export default function TransactionsPage() {
                         value={formAmount}
                         onChange={e => setFormAmount(e.target.value)}
 
-                        className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
+                        className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground font-mono outline-none transition-all ${
                           fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                         }`}
                       />
@@ -629,7 +629,7 @@ export default function TransactionsPage() {
 
                   {/* Description */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Descripción</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Descripción</label>
                     <input
                       type="text"
                       placeholder="Ej: Supermercado, Netflix, Sueldo..."
@@ -637,23 +637,23 @@ export default function TransactionsPage() {
                       onChange={e => setFormDescription(e.target.value)}
 
                       maxLength={120}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all ${
                         fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
                     {fieldErrors.description && <p className="text-red-400 text-xs mt-1">{fieldErrors.description}</p>}
-                    <p className="text-[10px] text-[var(--text-secondary)] mt-1 text-right">{formDescription.length}/120</p>
+                    <p className="text-[10px] text-muted-foreground mt-1 text-right">{formDescription.length}/120</p>
                   </div>
 
                   {/* Account + Category row */}
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     <div>
-                      <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Cuenta</label>
+                      <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Cuenta</label>
                       <select
                         value={formAccountId}
                         onChange={e => setFormAccountId(e.target.value)}
 
-                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all appearance-none ${
                           fieldErrors.account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                         }`}
                       >
@@ -665,12 +665,12 @@ export default function TransactionsPage() {
                       {fieldErrors.account_id && <p className="text-red-400 text-xs mt-1">{fieldErrors.account_id}</p>}
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Categoría</label>
+                      <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Categoría</label>
                       <select
                         value={formCategoryId}
                         onChange={e => setFormCategoryId(e.target.value)}
 
-                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                        className={`w-full px-3 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all appearance-none ${
                           fieldErrors.category_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                         }`}
                       >
@@ -685,14 +685,14 @@ export default function TransactionsPage() {
 
                   {/* Date */}
                   <div className="mb-6">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Fecha</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Fecha</label>
                     <input
                       type="date"
                       value={formDate}
                       onChange={e => setFormDate(e.target.value)}
 
                       max={new Date().toISOString().split('T')[0]}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all ${
                         fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
@@ -704,12 +704,12 @@ export default function TransactionsPage() {
                 <>
                   {/* From account */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Cuenta Origen</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Cuenta Origen</label>
                     <select
                       value={formFromAccount}
                       onChange={e => setFormFromAccount(e.target.value)}
 
-                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all appearance-none ${
                         fieldErrors.from_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     >
@@ -722,17 +722,17 @@ export default function TransactionsPage() {
                   </div>
 
                   <div className="flex justify-center mb-4">
-                    <span className="text-[var(--green-bright)] text-lg">↓</span>
+                    <span className="text-primary text-lg">↓</span>
                   </div>
 
                   {/* To account */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Cuenta Destino</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Cuenta Destino</label>
                     <select
                       value={formToAccount}
                       onChange={e => setFormToAccount(e.target.value)}
 
-                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all appearance-none ${
+                      className={`w-full px-3 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all appearance-none ${
                         fieldErrors.to_account_id ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     >
@@ -746,9 +746,9 @@ export default function TransactionsPage() {
 
                   {/* Amount */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Monto (CLP)</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Monto (CLP)</label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] text-sm">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                       <input
                         type="number"
                         inputMode="numeric"
@@ -756,7 +756,7 @@ export default function TransactionsPage() {
                         value={formTransferAmount}
                         onChange={e => setFormTransferAmount(e.target.value)}
 
-                        className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] font-mono outline-none transition-all ${
+                        className={`w-full pl-7 pr-10 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground font-mono outline-none transition-all ${
                           fieldErrors.amount ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                         }`}
                       />
@@ -766,7 +766,7 @@ export default function TransactionsPage() {
 
                   {/* Description */}
                   <div className="mb-4">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Descripción</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Descripción</label>
                     <input
                       type="text"
                       placeholder="Motivo de la transferencia"
@@ -774,7 +774,7 @@ export default function TransactionsPage() {
                       onChange={e => setFormTransferDesc(e.target.value)}
 
                       maxLength={120}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none transition-all ${
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-transparent border-b-2 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all ${
                         fieldErrors.description ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />
@@ -783,14 +783,14 @@ export default function TransactionsPage() {
 
                   {/* Date */}
                   <div className="mb-6">
-                    <label className="block text-[10px] uppercase tracking-widest text-[var(--text-secondary)] mb-2">Fecha</label>
+                    <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Fecha</label>
                     <input
                       type="date"
                       value={formTransferDate}
                       onChange={e => setFormTransferDate(e.target.value)}
 
                       max={new Date().toISOString().split('T')[0]}
-                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[var(--bg-base)] border-b-2 text-[var(--text-primary)] outline-none transition-all ${
+                      className={`w-full px-4 py-3 rounded-xl text-sm bg-[hsl(var(--background))] border-b-2 text-foreground outline-none transition-all ${
                         fieldErrors.transaction_date ? 'border-red-400/50' : 'border-white/10 focus:border-[var(--green-bright)]/40'
                       }`}
                     />

@@ -1,62 +1,57 @@
 'use client';
 
 import type { ChartDataPoint } from '@/types';
-
-function formatCLP(n: number) {
-  if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
-  if (n >= 1000) return `$${(n / 1000).toFixed(0)}K`;
-  return `$${n}`;
-}
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function ChartSection({ data }: { data: ChartDataPoint[] }) {
   const maxVal = Math.max(...data.map((d) => Math.max(d.income, d.expense)), 1);
 
   return (
-    <div className="card-static">
-      <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
-        Flujo Semanal
-      </h2>
-      <div className="flex items-end justify-between gap-2 h-48">
-        {data.map((point) => (
-          <div key={point.date} className="flex-1 flex flex-col items-center gap-1">
-            <div className="flex items-end gap-1 h-36 w-full">
-              {/* Income bar */}
-              <div className="flex-1 flex flex-col justify-end">
-                <div
-                  className="rounded-t-sm bg-[var(--green-bright)]/80 transition-all duration-500"
-                  style={{
-                    height: `${(point.income / maxVal) * 100}%`,
-                    minHeight: point.income > 0 ? '4px' : '0',
-                    boxShadow: point.income > 0 ? '0 0 8px var(--cyan-glow)' : 'none',
-                  }}
-                />
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm uppercase tracking-[0.1em] text-muted-foreground font-mono">
+          Flujo Semanal
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="flex items-end justify-between gap-2 h-48">
+          {data.map((point) => (
+            <div key={point.date} className="flex-1 flex flex-col items-center gap-1">
+              <div className="flex items-end gap-1 h-36 w-full">
+                <div className="flex-1 flex flex-col justify-end">
+                  <div
+                    className="rounded-t-sm bg-primary/80 transition-all duration-500"
+                    style={{
+                      height: `${(point.income / maxVal) * 100}%`,
+                      minHeight: point.income > 0 ? '4px' : '0',
+                    }}
+                  />
+                </div>
+                <div className="flex-1 flex flex-col justify-end">
+                  <div
+                    className="rounded-t-sm bg-destructive/80 transition-all duration-500"
+                    style={{
+                      height: `${(point.expense / maxVal) * 100}%`,
+                      minHeight: point.expense > 0 ? '4px' : '0',
+                    }}
+                  />
+                </div>
               </div>
-              {/* Expense bar */}
-              <div className="flex-1 flex flex-col justify-end">
-                <div
-                  className="rounded-t-sm bg-[var(--accent-negative)]/80 transition-all duration-500"
-                  style={{
-                    height: `${(point.expense / maxVal) * 100}%`,
-                    minHeight: point.expense > 0 ? '4px' : '0',
-                    boxShadow: point.expense > 0 ? '0 0 8px var(--magenta-glow)' : 'none',
-                  }}
-                />
-              </div>
+              <span className="text-[10px] text-muted-foreground font-mono">{point.label}</span>
             </div>
-            <span className="text-[10px] text-[var(--text-secondary)]">{point.label}</span>
+          ))}
+        </div>
+        <div className="flex gap-4 mt-3 justify-center">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm bg-primary/80" />
+            <span className="text-xs text-muted-foreground">Ingresos</span>
           </div>
-        ))}
-      </div>
-      <div className="flex gap-4 mt-3 justify-center">
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-[var(--green-bright)]/80" />
-          <span className="text-xs text-[var(--text-secondary)]">Ingresos</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm bg-destructive/80" />
+            <span className="text-xs text-muted-foreground">Gastos</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-sm bg-[var(--accent-negative)]/80" />
-          <span className="text-xs text-[var(--text-secondary)]">Gastos</span>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

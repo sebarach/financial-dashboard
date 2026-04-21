@@ -50,8 +50,8 @@ export default function AuthPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold">
-            <span className="text-[var(--green-bright)]">Fin</span>
-            <span className="text-[var(--accent-negative)]">Dash</span>
+            <span className="text-primary">Fin</span>
+            <span className="text-destructive">Dash</span>
           </h1>
           <p className="text-sm text-gray-400 mt-1">Tu dashboard financiero personal</p>
         </div>

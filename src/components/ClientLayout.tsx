@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -25,8 +28,8 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-base)' }}>
-        <div className="skeleton w-8 h-8 rounded-full" style={{ animation: 'pulse-subtle 1.2s ease-in-out infinite' }} />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="skeleton-matrix size-8 rounded-full" style={{ animation: 'pulse-subtle 1.2s ease-in-out infinite' }} />
       </div>
     );
   }
@@ -37,7 +40,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 }
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { user, signOut } = useAuth();
 
@@ -61,65 +64,47 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar */}
       {!isMobile && (
         <div className="fixed top-0 left-0 h-screen z-30">
-          <Sidebar onNavigate={() => setDrawerOpen(false)} />
+          <Sidebar onNavigate={() => setOpen(false)} />
         </div>
       )}
 
       {/* Mobile top bar */}
       {isMobile && (
         <header
-          className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center justify-between px-4"
-          style={{
-            background: 'rgba(2, 2, 2, 0.95)',
-            backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid var(--border-subtle)',
-          }}
+          className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center justify-between px-4 bg-background/95 backdrop-blur-sm border-b border-border"
         >
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded text-[var(--text-secondary)] hover:text-[var(--green-bright)] transition-colors"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <path d="M3 12H21M3 6H21M3 18H21" />
-            </svg>
-          </button>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger render={(props) => <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" {...props} />}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M3 12H21M3 6H21M3 18H21" />
+              </svg>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-[220px] bg-sidebar border-sidebar-border">
+              <SheetTitle className="sr-only">Navegación</SheetTitle>
+              <Sidebar onNavigate={() => setOpen(false)} />
+            </SheetContent>
+          </Sheet>
+
           <span className="text-sm font-semibold tracking-tight font-mono">
-            <span className="text-[var(--green-bright)]">fin</span>
-            <span className="text-[var(--text-secondary)]">dash</span>
+            <span className="text-primary">fin</span>
+            <span className="text-muted-foreground">dash</span>
           </span>
-          <button
+
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={signOut}
-            className="w-7 h-7 rounded-full overflow-hidden border border-[var(--border-accent)] flex-shrink-0"
+            className="rounded-full"
             title={`Logout (${fullName})`}
           >
-            {avatarUrl ? (
-              <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            ) : (
-              <div className="w-full h-full bg-[var(--green-ghost)] flex items-center justify-center text-[9px] font-bold text-[var(--green-bright)] font-mono">
+            <Avatar className="size-7 border border-[var(--border-accent)]">
+              {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} />}
+              <AvatarFallback className="bg-green-ghost text-primary text-[9px] font-mono font-bold">
                 {initials.toLowerCase()}
-              </div>
-            )}
-          </button>
+              </AvatarFallback>
+            </Avatar>
+          </Button>
         </header>
-      )}
-
-      {/* Mobile drawer overlay */}
-      {isMobile && drawerOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
-          onClick={() => setDrawerOpen(false)}
-        />
-      )}
-
-      {/* Mobile sidebar drawer */}
-      {isMobile && (
-        <div
-          className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ease-out ${
-            drawerOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
-        >
-          <Sidebar onNavigate={() => setDrawerOpen(false)} />
-        </div>
       )}
 
       {/* Main content */}

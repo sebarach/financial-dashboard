@@ -1,6 +1,7 @@
 'use client';
 
 import type { Account } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 function formatCLP(n: number) {
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
@@ -15,34 +16,38 @@ const typeLabels: Record<string, string> = {
 
 export function AccountsList({ accounts }: { accounts: Account[] }) {
   return (
-    <div className="card-static">
-      <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
-        Cuentas
-      </h2>
-      <div className="space-y-3">
-        {accounts.map((acc) => (
-          <div
-            key={acc.id}
-            className="flex items-center justify-between p-3 rounded-lg"
-            style={{
-              background: `linear-gradient(135deg, ${acc.bank.color}22, transparent)`,
-              borderLeft: `3px solid ${acc.bank.color}`,
-            }}
-          >
-            <div>
-              <p className="text-sm font-medium" style={{ color: acc.bank.color }}>
-                {acc.bank.name}
-              </p>
-              <p className="text-xs text-[var(--text-secondary)]">
-                {typeLabels[acc.accountType]}
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm uppercase tracking-[0.1em] text-muted-foreground font-mono">
+          Cuentas
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          {accounts.map((acc) => (
+            <div
+              key={acc.id}
+              className="flex items-center justify-between p-3 rounded-lg"
+              style={{
+                background: `linear-gradient(135deg, ${acc.bank.color}22, transparent)`,
+                borderLeft: `3px solid ${acc.bank.color}`,
+              }}
+            >
+              <div>
+                <p className="text-sm font-medium" style={{ color: acc.bank.color }}>
+                  {acc.bank.name}
+                </p>
+                <p className="text-xs text-muted-foreground font-mono">
+                  {typeLabels[acc.accountType]}
+                </p>
+              </div>
+              <p className="value-mono text-sm text-foreground">
+                {formatCLP(acc.balance)}
               </p>
             </div>
-            <p className="font-mono text-sm text-[var(--text-primary)]">
-              {formatCLP(acc.balance)}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

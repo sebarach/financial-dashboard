@@ -1,44 +1,78 @@
+
 /* ============================================
    FinDash — Matrix Terminal · Green on Black
    Inspired by opencode matrix theme
+   Powered by shadcn/ui
    ============================================ */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* shadcn Matrix Theme */
+    --background: #020202;
+    --foreground: #c8ffc8;
+    --card: rgba(6, 6, 6, 0.85);
+    --card-foreground: #c8ffc8;
+    --popover: #060606;
+    --popover-foreground: #c8ffc8;
+    --primary: #00ff41;
+    --primary-foreground: #020202;
+    --secondary: #0a0a0a;
+    --secondary-foreground: #c8ffc8;
+    --muted: #0a0a0a;
+    --muted-foreground: #4a7a4a;
+    --accent: rgba(0, 255, 65, 0.08);
+    --accent-foreground: #00ff41;
+    --destructive: #ff3b3b;
+    --destructive-foreground: #020202;
+    --border: rgba(0, 255, 65, 0.06);
+    --input: rgba(0, 255, 65, 0.06);
+    --ring: rgba(0, 255, 65, 0.35);
+    --radius: 0.75rem;
+    --chart-1: #00ff41;
+    --chart-2: #00cc33;
+    --chart-3: #009926;
+    --chart-4: #ff3b3b;
+    --chart-5: #ffaa00;
+    --sidebar: #060606;
+    --sidebar-foreground: #c8ffc8;
+    --sidebar-primary: #00ff41;
+    --sidebar-primary-foreground: #020202;
+    --sidebar-accent: rgba(0, 255, 65, 0.08);
+    --sidebar-accent-foreground: #00ff41;
+    --sidebar-border: rgba(0, 255, 65, 0.06);
+    --sidebar-ring: rgba(0, 255, 65, 0.35);
+  }
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+/* Custom Matrix Variables */
 :root {
-  /* Base */
-  --bg-base: #020202;
   --bg-surface: #060606;
   --bg-elevated: #0a0a0a;
-  --bg-card: rgba(6, 6, 6, 0.85);
   --bg-card-hover: rgba(10, 15, 10, 0.9);
-
-  /* Borders */
-  --border-subtle: rgba(0, 255, 65, 0.06);
   --border-accent: rgba(0, 255, 65, 0.15);
   --border-active: rgba(0, 255, 65, 0.35);
-
-  /* Greens */
   --green-bright: #00ff41;
   --green-mid: #00cc33;
   --green-dim: #009926;
   --green-ghost: rgba(0, 255, 65, 0.08);
   --green-glow: rgba(0, 255, 65, 0.12);
   --green-subtle: rgba(0, 255, 65, 0.04);
-
-  /* Accent states */
-  --accent-positive: #00ff41;
   --accent-negative: #ff3b3b;
   --accent-warn: #ffaa00;
-
-  /* Text */
   --text-primary: #c8ffc8;
   --text-secondary: #4a7a4a;
   --text-tertiary: #2a4a2a;
-
-  /* Fonts */
   --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Space Mono', 'JetBrains Mono', ui-monospace, monospace;
 }
@@ -48,8 +82,6 @@
 }
 
 body {
-  background: var(--bg-base);
-  color: var(--text-primary);
   font-family: var(--font-sans);
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
@@ -75,16 +107,6 @@ html { overflow-y: scroll; overscroll-behavior-y: contain; }
   50%      { opacity: 0.6; }
 }
 
-@keyframes scanline {
-  0%   { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 rgba(0, 255, 65, 0); }
-  50%      { box-shadow: 0 0 20px rgba(0, 255, 65, 0.08); }
-}
-
 @keyframes text-flicker {
   0%, 100% { opacity: 1; }
   92%      { opacity: 1; }
@@ -92,29 +114,6 @@ html { overflow-y: scroll; overscroll-behavior-y: contain; }
   94%      { opacity: 1; }
   96%      { opacity: 0.5; }
   97%      { opacity: 1; }
-}
-
-/* ---- Card System ---- */
-
-.card {
-  @apply rounded-xl p-4 sm:p-5;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.card:hover {
-  border-color: var(--border-accent);
-  background: var(--bg-card-hover);
-  box-shadow: 0 0 30px var(--green-subtle), inset 0 0 30px var(--green-subtle);
-}
-
-.card-static {
-  @apply rounded-xl p-4 sm:p-5;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
 }
 
 /* ---- Staggered Entrance ---- */
@@ -144,9 +143,9 @@ html { overflow-y: scroll; overscroll-behavior-y: contain; }
   animation: text-flicker 8s linear infinite;
 }
 
-/* ---- Loading Skeleton ---- */
+/* ---- Loading Skeleton (custom, green) ---- */
 
-.skeleton {
+.skeleton-matrix {
   background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--green-subtle) 50%, var(--bg-elevated) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
@@ -194,3 +193,10 @@ a, button { min-height: 44px; }
 .text-warn { color: var(--accent-warn); }
 .border-green { border-color: var(--border-accent); }
 .bg-green-ghost { background: var(--green-ghost); }
+
+/* ---- Card hover glow ---- */
+.card-glow:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 30px var(--green-subtle), inset 0 0 30px var(--green-subtle);
+}

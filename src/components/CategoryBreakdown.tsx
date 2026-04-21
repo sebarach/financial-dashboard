@@ -1,6 +1,7 @@
 'use client';
 
 import type { CategoryBreakdown as CategoryBreakdownType } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const categoryLabels: Record<string, string> = {
   food: '🍔 Comida',
@@ -20,32 +21,36 @@ function formatCLP(n: number) {
 
 export function CategoryBreakdown({ breakdown }: { breakdown: CategoryBreakdownType[] }) {
   return (
-    <div className="card-static">
-      <h2 className="text-sm uppercase tracking-widest text-[var(--text-secondary)] mb-4">
-        Gastos por Categoría
-      </h2>
-      <div className="space-y-3">
-        {breakdown.map((cat) => (
-          <div key={cat.category}>
-            <div className="flex justify-between text-sm mb-1">
-              <span>{categoryLabels[cat.category] || cat.category}</span>
-              <span className="text-[var(--text-secondary)]">
-                {formatCLP(cat.amount)} · {cat.percentage}%
-              </span>
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm uppercase tracking-[0.1em] text-muted-foreground font-mono">
+          Gastos por Categoría
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          {breakdown.map((cat) => (
+            <div key={cat.category}>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-foreground">{categoryLabels[cat.category] || cat.category}</span>
+                <span className="text-muted-foreground font-mono">
+                  {formatCLP(cat.amount)} · {cat.percentage}%
+                </span>
+              </div>
+              <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{
+                    width: `${cat.percentage}%`,
+                    background: `linear-gradient(90deg, ${cat.color}, ${cat.color}88)`,
+                    boxShadow: `0 0 8px ${cat.color}44`,
+                  }}
+                />
+              </div>
             </div>
-            <div className="h-2 rounded-full bg-white/5 overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{
-                  width: `${cat.percentage}%`,
-                  background: `linear-gradient(90deg, ${cat.color}, ${cat.color}88)`,
-                  boxShadow: `0 0 8px ${cat.color}44`,
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
