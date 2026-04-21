@@ -11,6 +11,7 @@ export interface Transaction {
   category: TransactionCategory;
   bank: Bank;
   status: 'completed' | 'pending' | 'failed';
+  accountId?: string;
 }
 
 export type TransactionCategory =

@@ -31,13 +31,13 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
     const supabase = createClient();
 
     // Current month range
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const firstDay = new Date(year, month, 1).toISOString().slice(0, 10);
-    const lastDay = new Date(year, month + 1, 0).toISOString().slice(0, 10);
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const firstDay = new Date(year, month, 1).toISOString().slice(0, 10);
+      const lastDay = new Date(year, month + 1, 0).toISOString().slice(0, 10);
 
-    try {
+      try {
       // Fetch current-month transactions with joins
       const { data: txData, error: txErr } = await supabase
         .from('transactions')
@@ -48,6 +48,15 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
         .order('transaction_date', { ascending: false });
 
       if (txErr) throw txErr;
+
+      // Fetch ALL transactions for account balance calculation
+      const { data: allTxData, error: allTxErr } = await supabase
+        .from('transactions')
+        .select('id, account_id, amount, type, status')
+        .eq('user_id', userId)
+        .eq('status', 'completed');
+
+      if (allTxErr) throw allTxErr;
 
       // Fetch accounts with banks
       const { data: accData, error: accErr } = await supabase
@@ -73,22 +82,39 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
           colorAlt: tx.account.bank.color_alt,
         } : { id: '', name: '', color: '#666', colorAlt: '#333' },
         status: tx.status,
+        accountId: tx.account_id,
       }));
 
-      // Map accounts
-      const mappedAcc: Account[] = (accData || []).map((acc: any) => ({
-        id: acc.id,
-        bank: acc.bank ? {
-          id: acc.bank.id,
-          name: acc.bank.name,
-          color: acc.bank.color,
-          colorAlt: acc.bank.color_alt,
-        } : { id: '', name: '', color: '#666', colorAlt: '#333' },
-        accountType: acc.account_type,
-        balance: acc.balance,
-        currency: acc.currency,
-        lastSync: acc.last_sync,
-      }));
+      // Map accounts with dynamic balance
+      const mappedAcc: Account[] = (accData || []).map((acc: any) => {
+        // Calculate balance from ALL transactions for this account
+        const accAllTx = (allTxData || []).filter((t: any) => t.account_id === acc.id);
+        const incomeTotal = accAllTx.filter((t: any) => t.type === 'income').reduce((s: number, t: any) => s + t.amount, 0);
+        const expenseTotal = accAllTx.filter((t: any) => t.type === 'expense').reduce((s: number, t: any) => s + Math.abs(t.amount), 0);
+
+        let dynamicBalance: number;
+        if (acc.account_type === 'credit') {
+          // Credit card: balance = debt (expenses - payments)
+          dynamicBalance = expenseTotal - incomeTotal;
+        } else {
+          // Checking/savings: stored balance from DB
+          dynamicBalance = acc.balance;
+        }
+
+        return {
+          id: acc.id,
+          bank: acc.bank ? {
+            id: acc.bank.id,
+            name: acc.bank.name,
+            color: acc.bank.color,
+            colorAlt: acc.bank.color_alt,
+          } : { id: '', name: '', color: '#666', colorAlt: '#333' },
+          accountType: acc.account_type,
+          balance: dynamicBalance,
+          currency: acc.currency,
+          lastSync: acc.last_sync,
+        };
+      });
 
       setTransactions(mappedTx);
       setAccounts(mappedAcc);
