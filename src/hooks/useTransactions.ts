@@ -41,7 +41,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
       // Fetch current-month transactions with joins
       const { data: txData, error: txErr } = await supabase
         .from('transactions')
-        .select('*, category:categories(*), account:accounts(bank:banks(*))')
+        .select('*, category:categories(*), account:accounts(name, bank:banks(*))')
         .eq('user_id', userId)
         .gte('transaction_date', firstDay)
         .lte('transaction_date', lastDay)
@@ -83,6 +83,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
         } : { id: '', name: '', color: '#666', colorAlt: '#333' },
         status: tx.status,
         accountId: tx.account_id,
+        accountName: tx.account?.name || '',
       }));
 
       // Map accounts with dynamic balance

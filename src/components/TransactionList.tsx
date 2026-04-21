@@ -17,6 +17,11 @@ const typeIcon: Record<string, string> = {
   transfer: '⇄',
 };
 
+function getAccountLast4(name: string) {
+  const match = name.match(/\*{0,4}(\d{4})/);
+  return match ? match[1] : '';
+}
+
 export function TransactionList({ transactions }: { transactions: Transaction[] }) {
   return (
     <Card>
@@ -47,7 +52,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
                 <div>
                   <p className="text-sm text-foreground">{tx.description}</p>
                   <p className="text-xs text-muted-foreground font-mono">
-                    {tx.bank.name} · {formatDate(tx.date)}
+                    {tx.bank.name}{tx.accountName ? ` · ****${getAccountLast4(tx.accountName)}` : ''} · {formatDate(tx.date)}
                   </p>
                 </div>
               </div>
