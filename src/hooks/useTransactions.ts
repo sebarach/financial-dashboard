@@ -87,20 +87,19 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
         notes: tx.notes || '',
       }));
 
-      // Map accounts with dynamic balance
+      // Map accounts with dynamic balance from ALL transactions
       const mappedAcc: Account[] = (accData || []).map((acc: any) => {
-        // Calculate balance from ALL transactions for this account
         const accAllTx = (allTxData || []).filter((t: any) => t.account_id === acc.id);
-        const incomeTotal = accAllTx.filter((t: any) => t.type === 'income').reduce((s: number, t: any) => s + t.amount, 0);
+        const incomeTotal = accAllTx.filter((t: any) => t.type === 'income').reduce((s: number, t: any) => s + Math.abs(t.amount), 0);
         const expenseTotal = accAllTx.filter((t: any) => t.type === 'expense').reduce((s: number, t: any) => s + Math.abs(t.amount), 0);
 
+        // For credit: balance = debt (expenses - payments)
+        // For checking/savings: balance = initial + income - expenses
         let dynamicBalance: number;
         if (acc.account_type === 'credit') {
-          // Credit card: balance = debt (expenses - payments)
           dynamicBalance = expenseTotal - incomeTotal;
         } else {
-          // Checking/savings: stored balance from DB
-          dynamicBalance = acc.balance;
+          dynamicBalance = acc.balance + incomeTotal - expenseTotal;
         }
 
         return {
