@@ -18,6 +18,7 @@ export default function DashboardPage() {
     categoryBreakdown,
     isLoading,
     error,
+    refetch,
   } = useTransactions(user?.id);
 
   if (isLoading) {
@@ -90,7 +91,7 @@ export default function DashboardPage() {
 
       {/* Accounts + Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-6">
-        <AccountsList accounts={accounts} transactions={transactions} />
+        <AccountsList accounts={accounts} transactions={transactions} onBalanceUpdate={refetch} />
         <div className="lg:col-span-2">
           <TransactionList transactions={transactions} />
         </div>
