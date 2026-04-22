@@ -1,10 +1,8 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useTransactions } from '@/hooks/useTransactions';
 import { useAuth } from '@/contexts/AuthContext';
 import { SummaryCards } from '@/components/SummaryCards';
-import { createClient } from '@/lib/supabase-client';
 import { AccountsList } from '@/components/AccountsList';
 import { TransactionList } from '@/components/TransactionList';
 import { ChartSection } from '@/components/ChartSection';
@@ -60,15 +58,6 @@ export default function DashboardPage() {
   const today = new Date();
   const dateStr = today.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  const handleSaveNotes = useCallback(async (id: string, notes: string) => {
-    const sb = createClient();
-    const { error } = await (sb as any)
-      .from('transactions')
-      .update({ notes })
-      .eq('id', id);
-    if (error) throw new Error(error.message);
-  }, []);
-
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 scanline-overlay" style={{ animation: 'fadeInUp 0.3s ease-out' }}>
       {/* Header */}
@@ -103,7 +92,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mt-4 sm:mt-6">
         <AccountsList accounts={accounts} transactions={transactions} />
         <div className="lg:col-span-2">
-          <TransactionList transactions={transactions} onSaveNotes={handleSaveNotes} />
+          <TransactionList transactions={transactions} />
         </div>
       </div>
     </main>

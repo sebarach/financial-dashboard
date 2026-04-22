@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Transaction } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { createClient } from '@/lib/supabase-client';
 
 const CATEGORY_LABELS: Record<string, string> = {
   salary: '💼 Sueldo', freelance: '💻 Freelance', food: '🍔 Comida',
@@ -33,17 +34,22 @@ function getAccountLast4(name: string) {
   return match ? match[1] : '';
 }
 
-export function TransactionList({ transactions, onSaveNotes }: { transactions: Transaction[]; onSaveNotes?: (id: string, notes: string) => Promise<void> }) {
+export function TransactionList({ transactions }: { transactions: Transaction[] }) {
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [savingNotes, setSavingNotes] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
 
   async function saveNotes() {
-    if (!selectedTx || !onSaveNotes) return;
+    if (!selectedTx) return;
     setSavingNotes(true);
     setNotesSaved(false);
     try {
-      await onSaveNotes(selectedTx.id, selectedTx.notes || '');
+      const sb = createClient();
+      const { error } = await (sb as any)
+        .from('transactions')
+        .update({ notes: selectedTx.notes })
+        .eq('id', selectedTx.id);
+      if (error) throw error;
       setNotesSaved(true);
       setTimeout(() => setNotesSaved(false), 2000);
     } catch (e: any) {
@@ -176,8 +182,7 @@ export function TransactionList({ transactions, onSaveNotes }: { transactions: T
               </div>
 
               {/* Notes */}
-              {onSaveNotes && (
-                <div className="mt-4">
+              <div className="mt-4">
                   <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">📝 Notas / Observaciones</label>
                   <textarea
                     value={selectedTx.notes || ''}
@@ -199,8 +204,7 @@ export function TransactionList({ transactions, onSaveNotes }: { transactions: T
                       {notesSaved ? '✓ Guardado' : savingNotes ? 'Guardando...' : '💾 Guardar notas'}
                     </button>
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* Actions */}
               <div className="flex gap-2 mt-6">
