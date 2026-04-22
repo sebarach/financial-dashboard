@@ -52,7 +52,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
       // Fetch ALL transactions for account balance calculation
       const { data: allTxData, error: allTxErr } = await supabase
         .from('transactions')
-        .select('id, account_id, amount, type, status')
+        .select('id, account_id, amount, type, status, notes')
         .eq('user_id', userId)
         .eq('status', 'completed');
 
@@ -84,6 +84,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
         status: tx.status,
         accountId: tx.account_id,
         accountName: tx.account?.name || '',
+        notes: tx.notes || '',
       }));
 
       // Map accounts with dynamic balance

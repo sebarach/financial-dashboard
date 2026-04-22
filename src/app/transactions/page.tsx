@@ -55,6 +55,8 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [selectedTx, setSelectedTx] = useState<typeof transactions[0] | null>(null);
+  const [savingNotes, setSavingNotes] = useState(false);
+  const [notesSaved, setNotesSaved] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -259,6 +261,27 @@ export default function TransactionsPage() {
       refetch();
     } catch (e: any) {
       alert(e.message);
+    }
+  }
+
+  async function saveNotes() {
+    if (!selectedTx) return;
+    setSavingNotes(true);
+    setNotesSaved(false);
+    try {
+      const sb = createClient();
+      const { error } = await (sb as any)
+        .from('transactions')
+        .update({ notes: selectedTx.notes })
+        .eq('id', selectedTx.id);
+      if (error) throw error;
+      setNotesSaved(true);
+      refetch();
+      setTimeout(() => setNotesSaved(false), 2000);
+    } catch (e: any) {
+      alert('Error al guardar notas: ' + e.message);
+    } finally {
+      setSavingNotes(false);
     }
   }
 
@@ -496,6 +519,31 @@ export default function TransactionsPage() {
                 <div className="flex justify-between py-2">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">ID</span>
                   <span className="text-[10px] text-muted-foreground font-mono">{selectedTx.id}</span>
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div className="mt-4">
+                <label className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-2">📝 Notas / Observaciones</label>
+                <textarea
+                  value={selectedTx.notes || ''}
+                  onChange={e => setSelectedTx({ ...selectedTx, notes: e.target.value })}
+                  placeholder="Ej: Compré pollo, arroz y verduras para la semana..."
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-transparent border border-white/10 focus:border-[var(--green-bright)]/40 text-foreground placeholder:text-muted-foreground/30 outline-none transition-all resize-none"
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={saveNotes}
+                    disabled={savingNotes}
+                    className="px-4 py-1.5 rounded-lg text-xs font-medium transition-all"
+                    style={{
+                      background: savingNotes ? 'rgba(255,255,255,0.05)' : 'linear-gradient(135deg, var(--green-bright), var(--green-mid))',
+                      color: '#0a0a1a',
+                    }}
+                  >
+                    {notesSaved ? '✓ Guardado' : savingNotes ? 'Guardando...' : '💾 Guardar notas'}
+                  </button>
                 </div>
               </div>
 

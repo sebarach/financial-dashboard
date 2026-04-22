@@ -13,6 +13,7 @@ export interface Transaction {
   status: 'completed' | 'pending' | 'failed';
   accountId?: string;
   accountName?: string;
+  notes?: string;
 }
 
 export type TransactionCategory =
