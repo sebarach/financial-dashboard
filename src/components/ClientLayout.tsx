@@ -79,7 +79,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
                 <path d="M3 12H21M3 6H21M3 18H21" />
               </svg>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 w-[220px] bg-sidebar border-sidebar-border">
+            <SheetContent side="left" className="p-0 w-[220px] bg-[#060606] border-sidebar-border">
               <SheetTitle className="sr-only">Navegación</SheetTitle>
               <Sidebar onNavigate={() => setOpen(false)} />
             </SheetContent>
