@@ -104,6 +104,7 @@ export function useTransactions(userId: string | undefined): UseTransactionsRetu
 
         return {
           id: acc.id,
+          name: acc.name || '',
           bank: acc.bank ? {
             id: acc.bank.id,
             name: acc.bank.name,

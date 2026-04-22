@@ -46,6 +46,7 @@ export const BANKS: Bank[] = [
 export const MOCK_ACCOUNTS: Account[] = [
   {
     id: 'acc-1',
+    name: 'Cuenta Corriente',
     bank: BANKS[0],
     accountType: 'checking',
     balance: 1845000,
@@ -54,6 +55,7 @@ export const MOCK_ACCOUNTS: Account[] = [
   },
   {
     id: 'acc-2',
+    name: 'Caja de Ahorro',
     bank: BANKS[0],
     accountType: 'savings',
     balance: 3200000,
@@ -62,6 +64,7 @@ export const MOCK_ACCOUNTS: Account[] = [
   },
   {
     id: 'acc-3',
+    name: 'Cuenta Corriente',
     bank: BANKS[1],
     accountType: 'checking',
     balance: 920000,
@@ -70,6 +73,7 @@ export const MOCK_ACCOUNTS: Account[] = [
   },
   {
     id: 'acc-4',
+    name: 'Cuenta de Ahorro',
     bank: BANKS[3],
     accountType: 'savings',
     balance: 450000,

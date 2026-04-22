@@ -36,6 +36,7 @@ export interface Bank {
 
 export interface Account {
   id: string;
+  name: string;
   bank: Bank;
   accountType: 'checking' | 'savings' | 'credit' | 'investment';
   balance: number;

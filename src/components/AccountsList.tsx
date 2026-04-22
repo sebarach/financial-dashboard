@@ -63,7 +63,7 @@ export function AccountsList({ accounts, transactions = [] }: { accounts: Accoun
                     {acc.bank.name}
                   </p>
                   <p className="text-xs text-muted-foreground font-mono">
-                    {typeLabels[acc.accountType]}
+                    {typeLabels[acc.accountType]}{acc.name ? ` · ${acc.name}` : ''}
                   </p>
                 </div>
                 <div className="text-right">
