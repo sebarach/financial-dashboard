@@ -363,17 +363,16 @@ export default function TransactionsPage() {
           </TabsList>
           <div className="flex gap-2 flex-1">
             {/* Account filter */}
-            <Select value={accountFilter} onValueChange={setAccountFilter}>
-              <SelectTrigger className="w-[160px] text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas las cuentas</SelectItem>
-                {txAccounts.map(([id, name]) => (
-                  <SelectItem key={id} value={id}>{name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <select
+              value={accountFilter}
+              onChange={e => setAccountFilter(e.target.value)}
+              className="px-3 py-2.5 rounded-xl text-sm bg-[hsl(var(--background))] border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground outline-none transition-all appearance-none cursor-pointer"
+            >
+              <option value="all">Todas las cuentas</option>
+              {txAccounts.map(([id, name]) => (
+                <option key={id} value={id}>{name}</option>
+              ))}
+            </select>
             {/* Month selector */}
             <select
               value={selectedMonth}
