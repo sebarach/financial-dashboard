@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase-client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTransactions } from '@/hooks/useTransactions';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import {
   createTransaction,
   createTransfer,
@@ -53,6 +56,7 @@ export default function TransactionsPage() {
   // List state
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [accountFilter, setAccountFilter] = useState<string>('all');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [selectedTx, setSelectedTx] = useState<typeof transactions[0] | null>(null);
   const [savingNotes, setSavingNotes] = useState(false);
@@ -144,6 +148,7 @@ export default function TransactionsPage() {
   // Filter transactions
   const filtered = transactions.filter(tx => {
     if (activeTab !== 'all' && tx.type !== activeTab) return false;
+    if (accountFilter !== 'all' && tx.accountId !== accountFilter) return false;
     if (selectedMonth) {
       const d = new Date(tx.date);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -155,6 +160,32 @@ export default function TransactionsPage() {
     }
     return true;
   });
+
+  // Unique account IDs from transactions for filter
+  const txAccounts = Array.from(
+    new Map(transactions.filter(t => t.accountId).map(t => [t.accountId!, t.accountName || t.bank.name])).entries()
+  );
+
+  // Group transactions by date
+  const groupedTransactions = (() => {
+    const groups: { label: string; dateKey: string; items: typeof filtered }[] = [];
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+    const map = new Map<string, typeof filtered>();
+    filtered.forEach(tx => {
+      const dateKey = tx.date.split('T')[0];
+      if (!map.has(dateKey)) map.set(dateKey, []);
+      map.get(dateKey)!.push(tx);
+    });
+
+    const sortedKeys = Array.from(map.keys()).sort().reverse();
+    for (const key of sortedKeys) {
+      const label = key === today ? 'Hoy' : key === yesterday ? 'Ayer' : formatDate(key);
+      groups.push({ label, dateKey: key, items: map.get(key)! });
+    }
+    return groups;
+  })();
 
   // Totals
   const totals = {
@@ -320,53 +351,60 @@ export default function TransactionsPage() {
         </div>
       </div>
 
-      {/* Tabs + Month selector + Search */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)' }}>
-          {(['all', 'income', 'expense', 'transfer'] as TabType[]).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                activeTab === tab
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-              style={activeTab === tab ? { background: 'rgba(0, 240, 255, 0.08)' } : undefined}
-            >
-              {tab === 'all' ? 'Todas' : tab === 'income' ? '↑ Ingresos' : tab === 'expense' ? '↓ Gastos' : '⇄ Transfer.'}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-2 flex-1">
-          <select
-            value={selectedMonth}
-            onChange={e => setSelectedMonth(e.target.value)}
-            className="px-3 py-2.5 rounded-xl text-sm bg-[hsl(var(--background))] border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground outline-none transition-all appearance-none cursor-pointer"
-          >
-            <option value="">Todos los meses</option>
-            {availableMonths.map(m => (
-              <option key={m} value={m}>
-                {monthLabels[m.split('-')[1]]} {m.split('-')[0]}
-              </option>
+      {/* Tabs + Filters */}
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-4">
+        <div className="flex flex-col sm:flex-row gap-3 mb-3">
+          <TabsList className="bg-muted/50">
+            {(['all', 'income', 'expense', 'transfer'] as TabType[]).map(tab => (
+              <TabsTrigger key={tab} value={tab}>
+                {tab === 'all' ? 'Todas' : tab === 'income' ? '↑ Ingresos' : tab === 'expense' ? '↓ Gastos' : '⇄ Transfer.'}
+              </TabsTrigger>
             ))}
-          </select>
-          <div className="flex-1 relative">
-            <input
-            type="text"
-            placeholder="Buscar transacción..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground placeholder:text-muted-foreground/50 outline-none transition-all"
-          />
-          {searchQuery && (
-            <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
-              ✕
-            </button>
-          )}
+          </TabsList>
+          <div className="flex gap-2 flex-1">
+            {/* Account filter */}
+            <Select value={accountFilter} onValueChange={setAccountFilter}>
+              <SelectTrigger className="w-[160px] text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas las cuentas</SelectItem>
+                {txAccounts.map(([id, name]) => (
+                  <SelectItem key={id} value={id}>{name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {/* Month selector */}
+            <select
+              value={selectedMonth}
+              onChange={e => setSelectedMonth(e.target.value)}
+              className="px-3 py-2.5 rounded-xl text-sm bg-[hsl(var(--background))] border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground outline-none transition-all appearance-none cursor-pointer"
+            >
+              <option value="">Todos los meses</option>
+              {availableMonths.map(m => (
+                <option key={m} value={m}>
+                  {monthLabels[m.split('-')[1]]} {m.split('-')[0]}
+                </option>
+              ))}
+            </select>
+            {/* Search */}
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder="Buscar transacción..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl text-sm bg-transparent border border-white/5 focus:border-[var(--green-bright)]/40 text-foreground placeholder:text-muted-foreground/50 outline-none transition-all"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
+      </Tabs>
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 gap-3 mb-4">
@@ -393,59 +431,87 @@ export default function TransactionsPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
-          {filtered.map(tx => (
-            <div
-              key={tx.id}
-              onClick={() => setSelectedTx(tx)}
-              className="py-4 px-4 rounded-xl bg-card border border-border backdrop-blur-sm py-3 px-4 flex items-center gap-3 group cursor-pointer hover:border-[var(--green-bright)]/20 transition-all"
-            >
-              {/* Icon */}
-              <div
-                className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 ${
-                  tx.type === 'income'
-                    ? 'bg-primary/10 text-primary'
-                    : tx.type === 'expense'
-                    ? 'bg-destructive/10 text-destructive'
-                    : 'bg-yellow-400/10 text-yellow-400'
-                }`}
-              >
-                {tx.type === 'income' ? '↑' : tx.type === 'expense' ? '↓' : '⇄'}
+        <div className="space-y-1">
+          {groupedTransactions.map(group => (
+            <div key={group.dateKey}>
+              {/* Date header */}
+              <div className="sticky top-0 z-10 px-1 py-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground/70">
+                  {group.label}
+                </span>
               </div>
+              {/* Transactions for this date */}
+              <div className="space-y-1.5">
+                {group.items.map(tx => (
+                  <div
+                    key={tx.id}
+                    onClick={() => setSelectedTx(tx)}
+                    className="rounded-xl bg-card border border-border backdrop-blur-sm px-4 py-3 flex items-center gap-3 group cursor-pointer hover:border-[var(--green-bright)]/20 transition-all"
+                  >
+                    {/* Icon */}
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0 ${
+                        tx.type === 'income'
+                          ? 'bg-primary/10 text-primary'
+                          : tx.type === 'expense'
+                          ? 'bg-destructive/10 text-destructive'
+                          : 'bg-yellow-400/10 text-yellow-400'
+                      }`}
+                    >
+                      {tx.type === 'income' ? '↑' : tx.type === 'expense' ? '↓' : '⇄'}
+                    </div>
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-sm truncate">{tx.description}</p>
-                <p className="text-xs text-muted-foreground">
-                  {tx.bank.name} · {formatDate(tx.date)} {formatTime(tx.date)}
-                  {tx.status === 'pending' && <span className="ml-2 text-yellow-400">pendiente</span>}
-                </p>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm truncate">{tx.description}</p>
+                        <Badge
+                          variant={tx.type === 'income' ? 'default' : 'destructive'}
+                          className="text-[9px] px-1.5 py-0 h-4 shrink-0"
+                          style={
+                            tx.type === 'income'
+                              ? { background: 'rgba(0,255,65,0.1)', color: '#00ff41' }
+                              : tx.type === 'transfer'
+                              ? { background: 'rgba(250,204,21,0.1)', color: '#facc15' }
+                              : undefined
+                          }
+                        >
+                          {tx.type === 'income' ? 'Ingreso' : tx.type === 'expense' ? 'Gasto' : 'Transf.'}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {tx.bank.name}{tx.accountName ? ` · ${tx.accountName}` : ''} · {formatTime(tx.date)}
+                        {tx.status === 'pending' && <span className="ml-2 text-yellow-400">pendiente</span>}
+                      </p>
+                    </div>
+
+                    {/* Amount */}
+                    <div className="text-right flex-shrink-0">
+                      <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-primary' : 'text-destructive'}`}>
+                        {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {CATEGORY_LABELS[tx.category] || tx.category}
+                      </p>
+                    </div>
+
+                    {/* Delete */}
+                    {deleteConfirm === tx.id ? (
+                      <div className="flex gap-1 flex-shrink-0">
+                        <button onClick={() => handleDelete(tx.id)} className="px-2 py-1 rounded-lg text-[10px] bg-red-500/20 text-red-400">Sí</button>
+                        <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-muted-foreground">No</button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setDeleteConfirm(tx.id)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-red-400 text-xs flex-shrink-0"
+                      >
+                        🗑
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-
-              {/* Amount */}
-              <div className="text-right flex-shrink-0">
-                <p className={`font-mono text-sm ${tx.amount >= 0 ? 'text-primary' : 'text-destructive'}`}>
-                  {tx.amount >= 0 ? '+' : ''}{formatCLP(tx.amount)}
-                </p>
-                <p className="text-[10px] text-muted-foreground">
-                  {CATEGORY_LABELS[tx.category] || tx.category}
-                </p>
-              </div>
-
-              {/* Delete */}
-              {deleteConfirm === tx.id ? (
-                <div className="flex gap-1 flex-shrink-0">
-                  <button onClick={() => handleDelete(tx.id)} className="px-2 py-1 rounded-lg text-[10px] bg-red-500/20 text-red-400">Sí</button>
-                  <button onClick={() => setDeleteConfirm(null)} className="px-2 py-1 rounded-lg text-[10px] border border-white/10 text-muted-foreground">No</button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setDeleteConfirm(tx.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-red-400 text-xs flex-shrink-0"
-                >
-                  🗑
-                </button>
-              )}
             </div>
           ))}
         </div>
